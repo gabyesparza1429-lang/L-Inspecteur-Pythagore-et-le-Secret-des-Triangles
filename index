@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Inspecteur Pythagore - Mission 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <img src="images/mission1.png" id="background-img" alt="Mission 1">
+
+        <canvas id="drawing-canvas"></canvas>
+
+        <div id="instruction-banner">Dessine le triangle et place les valeurs !</div>
+
+        <div id="inventory">
+            <div class="draggable" draggable="true" id="val-3" data-value="3">3</div>
+            <div class="draggable" draggable="true" id="val-4" data-value="4">4</div>
+        </div>
+
+        <div id="formula-board">
+            <div class="drop-target" id="target-a" data-required="3">?</div>
+            <span class="symbol">²</span>
+            <span class="symbol">+</span>
+            <div class="drop-target" id="target-b" data-required="4">?</div>
+            <span class="symbol">²</span>
+            <span class="symbol">=</span>
+            <div id="result-box">c²</div>
+        </div>
+
+        <button id="check-btn" class="hidden">Calculer l'Hypoténuse</button>
+    </div>
+
+    <audio id="snd-drop" src="sounds/drop.mp3"></audio>
+    <audio id="snd-success" src="sounds/success.mp3"></audio>
+    <audio id="snd-error" src="sounds/error.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
