@@ -148,4 +148,38 @@ window.onload = () => {
     initCanvas();
     setupDragAndDrop();
     loadLevel();
+
+// LÓGICA DE LA CALCULADORA
+let currentCalc = "";
+
+function toggleCalc() {
+    document.getElementById('mini-calc').classList.toggle('hidden');
+}
+
+function calcInput(num) {
+    currentCalc += num;
+    document.getElementById('calc-display').innerText = currentCalc;
+}
+
+function calcOp(op) {
+    currentCalc += " " + op + " ";
+    document.getElementById('calc-display').innerText = currentCalc;
+}
+
+function calcClear() {
+    currentCalc = "";
+    document.getElementById('calc-display').innerText = "0";
+}
+
+function calcRes() {
+    try {
+        // eval realiza la operación matemática
+        let result = eval(currentCalc.replace('×', '*').replace('÷', '/'));
+        currentCalc = result.toString();
+        document.getElementById('calc-display').innerText = currentCalc;
+    } catch (e) {
+        document.getElementById('calc-display').innerText = "Err";
+        currentCalc = "";
+    }
+}
 };
