@@ -3,29 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pythagore Game</title>
+    <title>L'Inspecteur Pythagore</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <div class="bubble">
-            <b>AIDE:</b> Sergio, dessine le triangle et place le 3 et le 4!
+
+    <div id="game-viewport">
+        <div id="game-container">
+            <div class="bubble" id="sergio-help">
+                <p id="msg">Bonjour Sergio! Dessine le triangle et place le 3 et le 4.</p>
+            </div>
+
+            <canvas id="drawing-canvas"></canvas>
+
+            <div id="inventory">
+                <div class="draggable" draggable="true">3</div>
+                <div class="draggable" draggable="true">4</div>
+            </div>
+
+            <div id="formula-zone">
+                <div class="drop-target" id="t1">?</div>
+                <span>² + </span>
+                <div class="drop-target" id="t2">?</div>
+                <span>² = c²</span>
+            </div>
+
+            <div class="ui-controls">
+                <button class="btn help" onclick="prochainePiste()">AIDE</button>
+                <button class="btn verify hidden" id="v-btn" onclick="verifier()">VÉRIFIER</button>
+            </div>
         </div>
-
-        <canvas id="drawing-canvas"></canvas>
-
-        <div id="inventory">
-            <div class="draggable" draggable="true">3</div>
-            <div class="draggable" draggable="true">4</div>
-        </div>
-
-        <div id="formula-zone">
-            <div class="drop-target">?</div><span>² +</span>
-            <div class="drop-target">?</div><span>² = c²</span>
-        </div>
-
-        <button id="check-btn" class="hidden" onclick="verifier()">VÉRIFIER</button>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
