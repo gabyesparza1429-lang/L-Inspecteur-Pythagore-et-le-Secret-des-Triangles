@@ -154,6 +154,20 @@ function calcRes() {
         document.getElementById('calc-display').innerText = "Err";
         currentCalc = "";
     }
+// NUEVA FUNCIÓN PARA LA RAÍZ CUADRADA
+function calcSqrt() {
+    try {
+        // Primero calculamos lo que esté en pantalla, luego sacamos raíz
+        let currentVal = eval(currentCalc.replace('×', '*').replace('÷', '/'));
+        let result = Math.sqrt(currentVal);
+        
+        // Redondeamos a 2 decimales por si no es exacta
+        currentCalc = (Math.round(result * 100) / 100).toString();
+        document.getElementById('calc-display').innerText = "√ = " + currentCalc;
+    } catch (e) {
+        document.getElementById('calc-display').innerText = "Err";
+        currentCalc = "";
+    }
 }
 
 // INICIO
