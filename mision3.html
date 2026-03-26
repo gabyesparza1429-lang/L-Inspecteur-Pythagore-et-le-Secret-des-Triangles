@@ -11,7 +11,7 @@
         <div id="game-container">
             <div id="instruction-panel">
                 <div id="progress-tag">Cas <span id="current-ex">1</span> / 10</div>
-                <p id="guide-text">Vérifie si ce triangle est RECTANGLE.</p>
+                <p id="guide-text">Est-ce un triangle RECTANGLE ?</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
@@ -22,24 +22,31 @@
                 <div class="draggable" draggable="true" id="val3">?</div>
             </div>
 
-            <div class="drop-label" id="label-c">?</div> 
-            <div class="drop-label" id="label-a">?</div>
+            <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-a">?</div>
             <div class="drop-label" id="label-b">?</div>
 
             <div id="step-panel" class="hidden">
-                <h3 style="text-align:center; color:#9b59b6; margin-bottom:10px;">Vérification</h3>
-                <div class="step">a² + b² = <input type="number" id="step-sum"></div>
-                <div class="step">c² (Hypo) = <input type="number" id="step-c2"></div>
+                <h3 style="text-align:center; color:#9b59b6; margin-bottom:15px;">Vérification</h3>
                 
-                <div id="decision-zone" class="hidden">
-                    <p style="margin:10px 0; font-weight:bold; text-align:center;">Est-ce égal ?</p>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-verdict vrai" onclick="checkVerdict(true)">VRAI ✅</button>
-                        <button class="btn-verdict faux" onclick="checkVerdict(false)">FAUX ❌</button>
+                <div class="step">
+                    <span>a² + b² =</span>
+                    <input type="number" id="step-sum" placeholder="Côtés">
+                </div>
+                
+                <div class="step">
+                    <span>c² (Hypo) =</span>
+                    <input type="number" id="step-c2" placeholder="Plus long">
+                </div>
+                
+                <div id="decision-zone" class="hidden" style="margin-top:20px; text-align:center; border-top: 2px solid #eee; padding-top:10px;">
+                    <p style="font-weight:bold; margin-bottom:10px;">Les résultats sont égaux ?</p>
+                    <div style="display:flex; gap:10px; justify-content:center;">
+                        <button class="btn-verdict vrai" onclick="checkVerdict(true)">OUI (Vrai) ✅</button>
+                        <button class="btn-verdict faux" onclick="checkVerdict(false)">NON (Faux) ❌</button>
                     </div>
                 </div>
 
-                <div id="calc-integration">
+                <div id="calc-integration" style="margin-top:15px;">
                     <button id="calc-toggle" onclick="toggleCalc()">🖩 CALCULATRICE</button>
                     <div id="mini-calc" class="hidden">
                         <div id="calc-display">0</div>
@@ -54,14 +61,14 @@
             </div>
 
             <div id="bravo-modal" class="modal hidden">
-                <div class="modal-content"><h2>🌟 EXCELLENT JUGE !</h2><button onclick="nextLevel()" style="background:#2ecc71; color:white; padding:10px 20px; border:none; border-radius:10px; margin-top:15px; cursor:pointer;">SUIVANT ➔</button></div>
+                <div class="modal-content"><h2>🌟 BRAVO INSPECTEUR !</h2><button onclick="nextLevel()">SUIVANT ➔</button></div>
             </div>
 
             <div id="error-modal" class="modal hidden">
                 <div class="modal-content" style="border-color: #e74c3c;">
                     <h2 style="color:#e74c3c;">⚠️ MAUVAIS VERDICT</h2>
-                    <p id="error-msg" style="margin-top:10px;"></p>
-                    <button onclick="closeError()" style="background:#e74c3c; color:white; padding:10px 20px; border:none; border-radius:10px; margin-top:15px; cursor:pointer;">REESSAYER</button>
+                    <p id="error-msg"></p>
+                    <button onclick="closeError()" style="background:#e74c3c;">REESSAYER</button>
                 </div>
             </div>
         </div>
