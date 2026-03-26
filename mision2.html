@@ -10,8 +10,8 @@
     <div id="game-viewport">
         <div id="game-container">
             <div id="instruction-panel">
-                <div id="progress-tag">Exercice <span id="current-ex">1</span> / 10</div>
-                <p id="guide-text">Trouve le côté manquant (Soustraction).</p>
+                <div id="progress-tag">Niveau <span id="current-ex">1</span> / 10</div>
+                <p id="guide-text">Trouve le côté secret (Soustraction).</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
@@ -21,19 +21,34 @@
                 <div class="draggable" draggable="true" id="val2">?</div>
             </div>
 
-            <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-b">?</div> <div id="step-panel" class="hidden">
-                <h3 style="font-size:14px; color:#e74c3c; margin-bottom:10px;">Calcul du côté (Resta)</h3>
+            <div class="drop-label" id="label-c">?</div> 
+            <div class="drop-label" id="label-b">?</div>
+
+            <div id="step-panel" class="hidden">
+                <h3 style="text-align:center; color:#e74c3c; margin-bottom:10px;">Calculs (Resta)</h3>
                 <div class="step">c² (Hypo) = <input type="number" id="step-c2"></div>
                 <div class="step">a² (Côté) = <input type="number" id="step-a2"></div>
-                <div class="step">c² - a² = <input type="number" id="step-minus"></div>
+                <div class="step">Reste = <input type="number" id="step-minus"></div>
                 <div class="step">√ (Racine) = <input type="number" id="step-sqrt"></div>
+
+                <div id="calc-integration">
+                    <button id="calc-toggle" onclick="toggleCalc()">🖩 CALCULATRICE</button>
+                    <div id="mini-calc" class="hidden">
+                        <div id="calc-display">0</div>
+                        <div class="calc-buttons">
+                            <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
+                            <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
+                            <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
+                            <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button onclick="calcRes()" style="background:#2ecc71">=</button><button class="op" onclick="calcSqrt()" style="background:#9b59b6">√</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="bravo-modal" class="modal hidden">
                 <div class="modal-content">
-                    <div class="star">🌟</div>
-                    <h2>TRES BIEN, SERGIO !</h2>
-                    <p>Le côté secret a été découvert.</p>
+                    <div class="star">⭐</div>
+                    <h2>BIEN JOUÉ, SERGIO !</h2>
                     <button onclick="nextLevel()">SUIVANT ➔</button>
                 </div>
             </div>
@@ -41,8 +56,8 @@
             <div id="error-modal" class="modal hidden">
                 <div class="modal-content" style="border-color: #e74c3c;">
                     <div class="star">⚠️</div>
-                    <h2 style="color: #e74c3c;">ATTENTION, SERGIO !</h2>
-                    <p id="error-msg">Message d'erreur ici.</p>
+                    <h2 style="color: #e74c3c;">ATTENTION !</h2>
+                    <p id="error-msg"></p>
                     <button onclick="closeError()" style="background:#e74c3c;">ESSAYER À NOUVEAU</button>
                 </div>
             </div>
