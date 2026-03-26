@@ -11,9 +11,8 @@ const ctx = canvas.getContext('2d');
 function loadLevel() {
     const data = missionData[currentLevel];
     document.getElementById('current-ex').innerText = currentLevel + 1;
-    // Mezclamos los valores para que Sergio identifique cuál es la hipotenusa
-    document.getElementById('val-hypo').innerText = data.c;
-    document.getElementById('val-cote').innerText = (data.a || data.b);
+    document.getElementById('val1').innerText = data.c;
+    document.getElementById('val2').innerText = (data.a || data.b);
     
     document.getElementById('label-c').innerText = "?";
     document.getElementById('label-b').innerText = "?";
@@ -22,35 +21,14 @@ function loadLevel() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// Validación de pasos con resta
-const inputIds = ['step-c2', 'step-a2', 'step-minus', 'step-sqrt'];
-inputIds.forEach((id, idx) => {
-    document.getElementById(id).addEventListener('input', function() {
-        const val = parseInt(this.value);
-        const data = missionData[currentLevel];
-        let correct = false;
-        const c2 = data.c ** 2;
-        const b2 = (data.a || data.b) ** 2;
+// Control de Modales
+function showError(msg) {
+    document.getElementById('error-msg').innerText = msg;
+    document.getElementById('error-modal').classList.remove('hidden');
+}
+function closeError() { document.getElementById('error-modal').classList.add('hidden'); }
 
-        if(id === 'step-c2') correct = (val === c2);
-        if(id === 'step-a2') correct = (val === b2);
-        if(id === 'step-minus') correct = (val === (c2 - b2));
-        if(id === 'step-sqrt') correct = (val === (data.a && data.b ? (data.a === parseInt(document.getElementById('val-cote').innerText) ? data.b : data.a) : data.a || data.b)); 
-        // Simplificado para Sergio: el resultado es el lado que faltaba
-        if(id === 'step-sqrt') correct = (val**2 === (c2-b2));
-
-        if(correct) {
-            this.style.borderColor = "#2ecc71";
-            if(id === 'step-sqrt') {
-                document.getElementById('bravo-modal').classList.remove('hidden');
-            } else {
-                document.getElementById(inputIds[idx+1]).focus();
-            }
-        }
-    });
-});
-
-// Drag and Drop
+// Drag & Drop con validación de hipotenusa
 document.querySelectorAll('.draggable').forEach(d => {
     d.ondragstart = (e) => e.dataTransfer.setData('text', e.target.innerText);
 });
@@ -61,29 +39,67 @@ document.querySelectorAll('.drop-label').forEach(t => {
         const val = parseInt(e.dataTransfer.getData('text'));
         const data = missionData[currentLevel];
         
-        // Regla de Sergio: La hipotenusa debe ir en el cuadro C
         if(t.id === 'label-c' && val !== data.c) {
-            alert("Attention ! L'hypoténuse est le côté le plus long.");
+            showError("Attention Sergio ! L'hypoténuse est le côté le plus long (" + data.c + "). Elle doit aller ici.");
             return;
         }
         
         t.innerText = val;
         if(document.getElementById('label-c').innerText !== '?' && document.getElementById('label-b').innerText !== '?') {
             document.getElementById('step-panel').classList.remove('hidden');
-            document.getElementById('step-c2').focus();
         }
     };
+});
+
+// Validación de Teclado (Detecta si olvidó el cuadrado)
+const inputIds = ['step-c2', 'step-a2', 'step-minus', 'step-sqrt'];
+inputIds.forEach((id, idx) => {
+    const input = document.getElementById(id);
+    input.addEventListener('change', () => {
+        const val = parseInt(input.value);
+        const data = missionData[currentLevel];
+        const hypo = data.c;
+        const lado = (data.a || data.b);
+
+        if(id === 'step-c2' && val === hypo) {
+            showError("Attention Sergio ! Ici c'est le CARRÉ (c²). Tu dois multiplier " + hypo + " x " + hypo);
+            input.value = ""; return;
+        }
+        if(id === 'step-a2' && val === lado) {
+            showError("N'oublie pas le CARRÉ ! " + lado + " x " + lado);
+            input.value = ""; return;
+        }
+    });
+
+    input.addEventListener('input', () => {
+        const val = parseInt(input.value);
+        const data = missionData[currentLevel];
+        let correct = false;
+        const c2 = data.c ** 2;
+        const a2 = (data.a || data.b) ** 2;
+
+        if(id === 'step-c2') correct = (val === c2);
+        if(id === 'step-a2') correct = (val === a2);
+        if(id === 'step-minus') correct = (val === (c2 - a2));
+        if(id === 'step-sqrt') correct = (val === (data.a + data.b - (data.a || data.b))); // Lado faltante
+
+        if(correct) {
+            input.style.borderColor = "#2ecc71";
+            if(id === 'step-sqrt') document.getElementById('bravo-modal').classList.remove('hidden');
+            else document.getElementById(inputIds[idx+1]).focus();
+        }
+    });
 });
 
 function nextLevel() {
     document.getElementById('bravo-modal').classList.add('hidden');
     currentLevel++;
     if(currentLevel < 10) loadLevel();
-    else alert("INCROYABLE ! TU AS DÉCOUVERT TOUS LES CÔTÉS SECRETS !");
+    else alert("FÉLICITATIONS SERGIO ! TU AS FINI LA MISSION 2 !");
 }
 
 window.onload = () => {
-    canvas.width = document.getElementById('game-container').clientWidth;
-    canvas.height = document.getElementById('game-container').clientHeight;
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
     loadLevel();
 };
