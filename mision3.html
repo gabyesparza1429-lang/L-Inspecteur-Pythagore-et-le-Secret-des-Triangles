@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mission 3 - La Réciproque</title>
+    <link rel="stylesheet" href="style3.css">
+</head>
+<body>
+    <div id="game-viewport">
+        <div id="game-container">
+            <div id="instruction-panel">
+                <div id="progress-tag">Cas <span id="current-ex">1</span> / 10</div>
+                <p id="guide-text">Est-ce un triangle rectangle ? Vérifie la loi !</p>
+            </div>
+
+            <div id="inventory">
+                <div class="draggable" draggable="true" id="val1">?</div>
+                <div class="draggable" draggable="true" id="val2">?</div>
+                <div class="draggable" draggable="true" id="val3">?</div>
+            </div>
+
+            <div class="drop-label" id="label-c" style="top: 40%; left: 45%;">?</div>
+            <div class="drop-label" id="label-a" style="top: 45%; left: 30%;">?</div>
+            <div class="drop-label" id="label-b" style="top: 75%; left: 55%;">?</div>
+
+            <div id="step-panel" class="hidden">
+                <div class="step">a² + b² = <input type="number" id="step-sum" placeholder="Suma"></div>
+                <div class="step">c² = <input type="number" id="step-c2" placeholder="C²"></div>
+                
+                <div id="decision-zone" class="hidden">
+                    <p>Est-ce égal ?</p>
+                    <button class="btn-vrai" onclick="verdict(true)">VRAI ✅</button>
+                    <button class="btn-faux" onclick="verdict(false)">FAUX ❌</button>
+                </div>
+            </div>
+
+            <div id="bravo-modal" class="modal hidden">
+                <div class="modal-content"><h2>🌟 CORRECT !</h2><button onclick="nextLevel()">SUIVANT</button></div>
+            </div>
+            <div id="error-modal" class="modal hidden">
+                <div class="modal-content" style="border-color: #e74c3c;">
+                    <h2>⚠️ ERREUR DE JUGE</h2>
+                    <p id="error-msg">Vérifie bien tes calculs.</p>
+                    <button onclick="closeError()" style="background:#e74c3c;">REESSAYER</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script3.js"></script>
+</body>
+</html>
