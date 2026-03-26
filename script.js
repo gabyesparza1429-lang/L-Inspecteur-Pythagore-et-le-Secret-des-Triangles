@@ -1,47 +1,69 @@
-let etape = 0;
-const messages = [
-    "1. Dessine le triangle sur la grille verte.",
-    "2. Glisse le '3' dans le premier carré de la formule.",
-    "3. Glisse le '4' dans le deuxième carré.",
-    "4. Super ! Clique sur VÉRIFIER."
-];
-
-function prochaineEtape() {
-    document.getElementById('instruction-text').innerText = messages[etape];
-    if (etape === 1 || etape === 2) {
-        document.querySelectorAll('.drop-target').forEach(t => t.classList.add('highlight'));
-    }
-    etape = (etape + 1) % messages.length;
-}
-
-// Lógica de dibujo simple
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
-canvas.width = 450; canvas.height = 300;
+const container = document.getElementById('game-container');
+
+// Ajustar resolución del canvas al tamaño real que se ve
+function resizeCanvas() {
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 let drawing = false;
 
-canvas.onmousedown = () => drawing = true;
-canvas.onmouseup = () => { drawing = false; ctx.beginPath(); };
-canvas.onmousemove = (e) => {
-    if(!drawing) return;
-    ctx.lineWidth = 5; ctx.strokeStyle = '#2ecc71';
-    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
-};
+// Dibujo adaptable
+function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+    };
+}
 
-// Drag and Drop
+canvas.addEventListener('mousedown', () => drawing = true);
+canvas.addEventListener('touchstart', () => drawing = true);
+window.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+window.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
+
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('touchmove', draw);
+
+function draw(e) {
+    if (!drawing) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#2ecc71';
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    ctx.moveTo(pos.x, pos.y);
+}
+
+// Drag & Drop
 document.querySelectorAll('.draggable').forEach(d => {
-    d.ondragstart = (e) => e.dataTransfer.setData('text', e.target.innerText);
+    d.addEventListener('dragstart', e => e.dataTransfer.setData('text', e.target.innerText));
 });
 
 document.querySelectorAll('.drop-target').forEach(t => {
-    t.ondragover = (e) => e.preventDefault();
-    t.ondrop = (e) => {
+    t.addEventListener('dragover', e => e.preventDefault());
+    t.addEventListener('drop', e => {
         t.innerText = e.dataTransfer.getData('text');
-        t.classList.remove('highlight');
-        document.getElementById('check-btn').classList.remove('hidden');
-    };
+        t.style.background = "#e8f8f5";
+        checkProgress();
+    });
 });
 
+function checkProgress() {
+    const targets = document.querySelectorAll('.drop-target');
+    if (targets[0].innerText !== '?' && targets[1].innerText !== '?') {
+        document.getElementById('check-btn').classList.remove('hidden');
+    }
+}
+
 function verifier() {
-    alert("Bravo Sergio ! 3² + 4² = 9 + 16 = 25. La racine de 25 est 5 !");
+    alert("Bravo Sergio! 3² + 4² = 25. La racine carrée est 5!");
 }
