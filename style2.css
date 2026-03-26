@@ -1,0 +1,35 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #2c3e50; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Comic Sans MS', sans-serif; }
+
+#game-container {
+    position: relative; width: 95vw; height: 90vh; max-width: 1000px;
+    background-image: url('images/mision2.png'); /* Asegúrate de subir la imagen 2 */
+    background-size: 100% 100%; border: 5px solid #e74c3c; border-radius: 20px;
+}
+
+#instruction-panel {
+    position: absolute; top: 15px; right: 20px; width: 260px;
+    background: white; padding: 10px; border-radius: 15px; border: 3px solid #e74c3c; z-index: 100;
+}
+
+#progress-tag { background: #e74c3c; color: white; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold; margin-bottom: 5px; display: inline-block; }
+
+#step-panel {
+    position: absolute; right: 20px; top: 120px; width: 230px;
+    background: white; padding: 15px; border-radius: 15px; border: 4px solid #e74c3c; z-index: 100;
+}
+
+.step { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; font-size: 14px; }
+.step input { width: 65px; height: 35px; text-align: center; font-size: 18px; border: 2px solid #bdc3c7; border-radius: 5px; }
+
+/* Posiciones de las etiquetas para el triángulo de la Misión 2 */
+#label-c { top: 40%; left: 45%; border-color: #e74c3c; } /* Hipotenusa */
+#label-b { top: 72%; left: 61%; } /* Cateto */
+
+.drop-label { position: absolute; width: 55px; height: 55px; background: rgba(255,255,255,0.8); border: 3px dashed #3498db; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10; }
+#inventory { position: absolute; left: 20px; top: 100px; z-index: 20; display: flex; flex-direction: column; gap: 15px; }
+.draggable { width: 65px; height: 65px; background: #f1c40f; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 26px; font-weight: bold; cursor: grab; box-shadow: 0 5px 0 #b7950b; }
+.modal { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: white; padding: 30px; border-radius: 25px; text-align: center; border: 6px solid #e74c3c; }
+.hidden { display: none !important; }
+#drawing-canvas { position: absolute; inset: 0; z-index: 5; }
