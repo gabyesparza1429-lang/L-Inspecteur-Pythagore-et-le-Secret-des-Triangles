@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mission 1 - L'Hypoténuse</title>
+    <title>L'Inspecteur Pythagore - Mission 1</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-viewport">
         <div id="game-container">
             <div id="instruction-panel">
-                <span id="guide-text">1. Glisse les mesures sur le triangle.</span>
-                <div id="progress-bar">Exercice: <span id="current-ex">1</span> / 10</div>
+                <div id="progress-tag">Niveau <span id="current-ex">1</span> / 10</div>
+                <p id="guide-text">Glisse les mesures sur le triangle.</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
@@ -33,9 +33,10 @@
 
             <div id="bravo-modal" class="modal hidden">
                 <div class="modal-content">
-                    <h2>🌟 BRAVO SERGIO ! 🌟</h2>
-                    <p>C'est correct ! Tu es un champion.</p>
-                    <button onclick="nextLevel()">CONTINUER</button>
+                    <div class="star">⭐</div>
+                    <h2>TRES BIEN, SERGIO !</h2>
+                    <p>Le triangle n'a plus de secrets pour toi.</p>
+                    <button onclick="nextLevel()">SUIVANT ➔</button>
                 </div>
             </div>
         </div>
