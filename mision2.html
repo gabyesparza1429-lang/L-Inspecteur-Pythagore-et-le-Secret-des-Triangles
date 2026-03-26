@@ -10,19 +10,19 @@
     <div id="game-viewport">
         <div id="game-container">
             <div id="instruction-panel">
-                <div id="progress-tag">Niveau <span id="current-ex">1</span> / 10</div>
-                <p id="guide-text">Glisse l'hypoténuse (le plus grand) en premier !</p>
+                <div id="progress-tag">Exercice <span id="current-ex">1</span> / 10</div>
+                <p id="guide-text">Trouve le côté manquant (Soustraction).</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
 
             <div id="inventory">
-                <div class="draggable" draggable="true" id="val-hypo">?</div>
-                <div class="draggable" draggable="true" id="val-cote">?</div>
+                <div class="draggable" draggable="true" id="val1">?</div>
+                <div class="draggable" draggable="true" id="val2">?</div>
             </div>
 
             <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-b">?</div> <div id="step-panel" class="hidden">
-                <h3 style="font-size:12px; color:#e74c3c; margin-bottom:5px;">SOUSTRACTION (Resta)</h3>
+                <h3 style="font-size:14px; color:#e74c3c; margin-bottom:10px;">Calcul du côté (Resta)</h3>
                 <div class="step">c² (Hypo) = <input type="number" id="step-c2"></div>
                 <div class="step">a² (Côté) = <input type="number" id="step-a2"></div>
                 <div class="step">c² - a² = <input type="number" id="step-minus"></div>
@@ -31,10 +31,19 @@
 
             <div id="bravo-modal" class="modal hidden">
                 <div class="modal-content">
-                    <div class="star">🔑</div>
-                    <h2>BIEN JOUÉ SERGIO !</h2>
-                    <p>Tu as trouvé le côté secret.</p>
+                    <div class="star">🌟</div>
+                    <h2>TRES BIEN, SERGIO !</h2>
+                    <p>Le côté secret a été découvert.</p>
                     <button onclick="nextLevel()">SUIVANT ➔</button>
+                </div>
+            </div>
+
+            <div id="error-modal" class="modal hidden">
+                <div class="modal-content" style="border-color: #e74c3c;">
+                    <div class="star">⚠️</div>
+                    <h2 style="color: #e74c3c;">ATTENTION, SERGIO !</h2>
+                    <p id="error-msg">Message d'erreur ici.</p>
+                    <button onclick="closeError()" style="background:#e74c3c;">ESSAYER À NOUVEAU</button>
                 </div>
             </div>
         </div>
