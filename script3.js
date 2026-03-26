@@ -12,7 +12,7 @@ function loadLevel() {
     const data = missionData[currentLevel];
     document.getElementById('current-ex').innerText = currentLevel + 1;
     
-    // Mezclar números para el inventario
+    // Mezclar los 3 números para que Sergio identifique la hipotenusa solo
     const nums = [data.a, data.b, data.c].sort(() => Math.random() - 0.5);
     document.getElementById('val1').innerText = nums[0];
     document.getElementById('val2').innerText = nums[1];
@@ -45,7 +45,7 @@ document.querySelectorAll('.drop-label').forEach(t => {
         const max = Math.max(data.a, data.b, data.c);
 
         if(t.id === 'label-c' && val !== max) {
-            showError("Sergio, l'hypoténuse est TOUJOURS le plus grand nombre (" + max + ") !");
+            showError("Attention Sergio ! L'hypoténuse est TOUJOURS le plus grand nombre (" + max + ") !");
             return;
         }
         t.innerText = val;
@@ -56,9 +56,11 @@ document.querySelectorAll('.drop-label').forEach(t => {
     };
 });
 
-// Validación de cálculos para desbloquear botones
+// Validación de cálculos
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('change', () => {
+        const val = parseInt(input.value);
+        if (isNaN(val)) return;
         const data = missionData[currentLevel];
         const sum = parseInt(document.getElementById('step-sum').value);
         const c2 = parseInt(document.getElementById('step-c2').value);
@@ -66,7 +68,7 @@ document.querySelectorAll('input').forEach(input => {
         if (sum === (data.a**2 + data.b**2) && c2 === (data.c**2)) {
             document.getElementById('decision-zone').classList.remove('hidden');
         } else {
-            if(input.value !== "") showError("Calcul incorrect. Vérifie tes carrés !");
+            showError("Les calculs sont incorrects. Vérifie bien les carrés !");
             input.value = "";
         }
     });
@@ -76,7 +78,7 @@ function checkVerdict(userChoice) {
     if(userChoice === missionData[currentLevel].isReal) {
         document.getElementById('bravo-modal').classList.remove('hidden');
     } else {
-        showError("Le verdict est faux ! Regarde si a² + b² est ÉGAL à c².");
+        showError("Le verdict est faux ! Regarde bien si la somme est égale au carré de l'hypoténuse.");
     }
 }
 
@@ -94,6 +96,6 @@ function calcInput(n) { currentCalc += n; document.getElementById('calc-display'
 function calcOp(o) { currentCalc += " " + o + " "; document.getElementById('calc-display').innerText = currentCalc; }
 function calcClear() { currentCalc = ""; document.getElementById('calc-display').innerText = "0"; }
 function calcRes() { try { currentCalc = eval(currentCalc.replace('×', '*').replace('÷', '/')).toString(); document.getElementById('calc-display').innerText = currentCalc; } catch(e) { calcClear(); } }
-function calcSqrt() { try { let v = eval(currentCalc); currentCalc = Math.round(Math.sqrt(v)).toString(); document.getElementById('calc-display').innerText = "√ = " + currentCalc; } catch(e) { calcClear(); } }
+function calcSqrt() { try { let v = eval(currentCalc.replace('×', '*').replace('÷', '/')); currentCalc = Math.round(Math.sqrt(v)).toString(); document.getElementById('calc-display').innerText = "√ = " + currentCalc; } catch(e) { calcClear(); } }
 
 window.onload = loadLevel;
