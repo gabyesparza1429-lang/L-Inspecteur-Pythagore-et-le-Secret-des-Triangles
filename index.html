@@ -7,10 +7,10 @@
 </head>
 <body>
     <div id="game-container">
-        <img src="images/mision%201.png" id="background-img" class="mission-bg">
+        <img src="images/mision1.png" id="background-img" class="mission-bg">
         
-        <div id="inspector-hint" class="hint-bubble">
-            <p id="hint-text">¡Hola Sergio! Empieza dibujando el triángulo sobre la cuadrícula.</p>
+        <div id="guide-sergio" class="bubble">
+            <p id="instruction-text">Bonjour Sergio ! Dessine d'abord le triangle.</p>
         </div>
 
         <canvas id="drawing-canvas"></canvas>
@@ -20,16 +20,16 @@
             <div class="draggable" draggable="true" id="val-4" data-value="4">4</div>
         </div>
 
-        <div id="formula-drop-zone">
+        <div id="formula-zone">
             <div class="drop-target" id="target-a">?</div>
             <span>² + </span>
             <div class="drop-target" id="target-b">?</div>
             <span>² = c²</span>
         </div>
 
-        <div class="controls">
-            <button id="help-btn" onclick="darPista()">Obtenir de l'aide</button>
-            <button id="check-btn" class="hidden" onclick="verificarMision1()">Calculer l'Hypoténuse</button>
+        <div class="button-group">
+            <button id="help-btn" onclick="prochaineEtape()">AIDE / AIDEZ-MOI</button>
+            <button id="check-btn" class="hidden" onclick="verifier()">VÉRIFIER</button>
         </div>
     </div>
     <script src="script.js"></script>
