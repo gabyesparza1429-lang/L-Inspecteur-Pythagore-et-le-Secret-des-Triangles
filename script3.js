@@ -46,7 +46,7 @@ function drawTriangle() {
 
     // Estilo de línea (Morado de la misión 3)
     ctx.lineWidth = 5;
-    ctx.strokeStyle = '#9b59b6';
+    ctx.strokeStyle = 'red';
     ctx.lineJoin = 'round';
     ctx.stroke();
 
