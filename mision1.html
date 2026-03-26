@@ -11,6 +11,17 @@
         <div id="instruction-panel">
             <div id="progress-tag">Exercice <span id="current-ex">1</span> / 10</div>
             <p id="guide-text">Glisse les mesures sur le triangle.</p>
+<button id="calc-toggle" onclick="toggleCalc()">🖩</button>
+
+<div id="mini-calc" class="hidden">
+    <div id="calc-display">0</div>
+    <div class="calc-buttons">
+        <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
+        <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
+        <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
+        <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button onclick="calcRes()">=</button><button class="op" onclick="calcOp('/')">÷</button>
+    </div>
+</div>
         </div>
 
         <canvas id="drawing-canvas"></canvas>
