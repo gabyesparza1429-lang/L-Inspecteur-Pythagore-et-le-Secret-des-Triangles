@@ -22,7 +22,8 @@
                 <div class="draggable" draggable="true" id="val3">?</div>
             </div>
 
-            <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-a">?</div>
+            <div class="drop-label" id="label-c">?</div> 
+            <div class="drop-label" id="label-a">?</div>
             <div class="drop-label" id="label-b">?</div>
 
             <div id="step-panel" class="hidden">
@@ -31,7 +32,7 @@
                 <div class="step">c² (Hypo) = <input type="number" id="step-c2"></div>
                 
                 <div id="decision-zone" class="hidden">
-                    <p style="margin-bottom:10px; font-weight:bold;">Est-ce égal ?</p>
+                    <p style="margin:10px 0; font-weight:bold; text-align:center;">Est-ce égal ?</p>
                     <div style="display:flex; gap:10px;">
                         <button class="btn-verdict vrai" onclick="checkVerdict(true)">VRAI ✅</button>
                         <button class="btn-verdict faux" onclick="checkVerdict(false)">FAUX ❌</button>
@@ -53,14 +54,14 @@
             </div>
 
             <div id="bravo-modal" class="modal hidden">
-                <div class="modal-content"><h2>🌟 EXCELLENT JUGE !</h2><button onclick="nextLevel()">SUIVANT ➔</button></div>
+                <div class="modal-content"><h2>🌟 EXCELLENT JUGE !</h2><button onclick="nextLevel()" style="background:#2ecc71; color:white; padding:10px 20px; border:none; border-radius:10px; margin-top:15px; cursor:pointer;">SUIVANT ➔</button></div>
             </div>
 
             <div id="error-modal" class="modal hidden">
                 <div class="modal-content" style="border-color: #e74c3c;">
-                    <h2>⚠️ MAUVAIS VERDICT</h2>
-                    <p id="error-msg"></p>
-                    <button onclick="closeError()" style="background:#e74c3c;">REESSAYER</button>
+                    <h2 style="color:#e74c3c;">⚠️ MAUVAIS VERDICT</h2>
+                    <p id="error-msg" style="margin-top:10px;"></p>
+                    <button onclick="closeError()" style="background:#e74c3c; color:white; padding:10px 20px; border:none; border-radius:10px; margin-top:15px; cursor:pointer;">REESSAYER</button>
                 </div>
             </div>
         </div>
