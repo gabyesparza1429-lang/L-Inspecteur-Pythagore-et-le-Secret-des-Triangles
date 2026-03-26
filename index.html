@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'Inspecteur Pythagore - Menu Principal</title>
+    <title>L'Inspecteur Pythagore - Menu</title>
     <style>
         body {
             background: #1a1a1a;
@@ -15,91 +15,131 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
         }
-        h1 { font-size: 2.8rem; color: #f1c40f; text-shadow: 3px 3px #e67e22; text-align: center; margin-bottom: 10px; }
-        .subtitle { margin-bottom: 40px; font-size: 1.2rem; color: #bdc3c7; }
+        h1 { font-size: 2.5rem; color: #f1c40f; text-shadow: 3px 3px #e67e22; margin-bottom: 30px; }
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
+            grid-template-columns: repeat(2, 220px);
+            gap: 25px;
         }
 
         .mission-card {
             background: #2c3e50;
-            border: 5px solid white;
+            border: 5px solid #7f8c8d;
             border-radius: 20px;
             padding: 25px;
             text-align: center;
             text-decoration: none;
             color: white;
-            transition: all 0.3s ease;
+            position: relative;
+            transition: 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
         }
 
-        .mission-card:hover { transform: translateY(-10px); }
+        /* Estilos cuando está BLOQUEADO */
+        .locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
 
-        /* Colores por Misión */
-        .m1 { border-color: #3498db; } .m1:hover { background: #3498db; }
-        .m2 { border-color: #e74c3c; } .m2:hover { background: #e74c3c; }
-        .m3 { border-color: #9b59b6; } .m3:hover { background: #9b59b6; }
-        .m4 { border-color: #2ecc71; } .m4:hover { background: #2ecc71; }
+        /* Estilos cuando está DESBLOQUEADO */
+        .unlocked {
+            opacity: 1;
+            cursor: pointer;
+            filter: grayscale(0);
+            border-color: white;
+        }
+        .unlocked:hover { transform: scale(1.05); }
 
-        .icon { font-size: 50px; margin-bottom: 15px; }
-        h2 { margin: 10px 0; font-size: 1.3rem; }
-        .desc { font-size: 0.85rem; opacity: 0.9; min-height: 40px; }
+        /* Colores de borde por misión si están abiertas */
+        .m1.unlocked { border-color: #3498db; }
+        .m2.unlocked { border-color: #e74c3c; }
+        .m3.unlocked { border-color: #9b59b6; }
+        .m4.unlocked { border-color: #2ecc71; }
+
+        .icon { font-size: 50px; margin-bottom: 10px; }
+        .status-label { font-size: 12px; font-weight: bold; margin-top: 10px; padding: 4px 10px; border-radius: 10px; background: #34495e; }
         
-        .btn-play {
-            margin-top: 15px;
-            background: white;
-            color: #1a1a1a;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
+        .lock-overlay {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
 
     <h1>L'Inspecteur Pythagore</h1>
-    <p class="subtitle">Choisis ta mission, Sergio !</p>
+    <p style="margin-bottom: 30px;">Salut Sergio ! Prêt pour le défi ?</p>
 
     <div class="menu-grid">
-        <a href="mision1.html" class="mission-card m1">
+        <a href="mision1.html" class="mission-card m1 unlocked" id="card-m1">
             <div class="icon">📐</div>
             <h2>MISSION 1</h2>
-            <p class="desc">L'Hypoténuse (Addition)</p>
-            <div class="btn-play">COMMENCER</div>
+            <div class="status-label">OUVERT</div>
         </a>
 
-        <a href="mision2.html" class="mission-card m2">
+        <a href="#" class="mission-card m2 locked" id="card-m2">
+            <div class="lock-overlay">🔒</div>
             <div class="icon">🔑</div>
             <h2>MISSION 2</h2>
-            <p class="desc">Le Côté Manquant (Soustraction)</p>
-            <div class="btn-play">COMMENCER</div>
+            <div class="status-label">BLOQUÉ</div>
         </a>
 
-        <a href="mision3.html" class="mission-card m3">
+        <a href="#" class="mission-card m3 locked" id="card-m3">
+            <div class="lock-overlay">🔒</div>
             <div class="icon">🔄</div>
             <h2>MISSION 3</h2>
-            <p class="desc">La Réciproque (Vrai ou Faux?)</p>
-            <div class="btn-play">DÉBLOQUER</div>
+            <div class="status-label">BLOQUÉ</div>
         </a>
 
-        <a href="mision4.html" class="mission-card m4">
+        <a href="#" class="mission-card m4 locked" id="card-m4">
+            <div class="lock-overlay">🔒</div>
             <div class="icon">🏆</div>
             <h2>MISSION 4</h2>
-            <p class="desc">Le Défi Final de Pythagore</p>
-            <div class="btn-play">DÉBLOQUER</div>
+            <div class="status-label">BLOQUÉ</div>
         </a>
     </div>
 
+    <script>
+        // LÓGICA DE DESBLOQUEO
+        function updateMenu() {
+            // Revisamos qué niveles ha pasado Sergio
+            const m1Passed = localStorage.getItem('mision1_completed');
+            const m2Passed = localStorage.getItem('mision2_completed');
+            const m3Passed = localStorage.getItem('mision3_completed');
+
+            // Si pasó la 1, desbloqueamos la 2
+            if (m1Passed === 'true') {
+                const card2 = document.getElementById('card-m2');
+                card2.classList.remove('locked');
+                card2.classList.add('unlocked');
+                card2.href = "mision2.html";
+                card2.querySelector('.lock-overlay').innerText = "✅";
+                card2.querySelector('.status-label').innerText = "DÉBLOQUÉ";
+                card2.querySelector('.status-label').style.background = "#e74c3c";
+            }
+
+            // Si pasó la 2, desbloqueamos la 3
+            if (m2Passed === 'true') {
+                const card3 = document.getElementById('card-m3');
+                card3.classList.remove('locked');
+                card3.classList.add('unlocked');
+                card3.href = "mision3.html";
+                card3.querySelector('.lock-overlay').innerText = "✅";
+                card3.querySelector('.status-label').innerText = "DÉBLOQUÉ";
+                card3.querySelector('.status-label').style.background = "#9b59b6";
+            }
+
+            // ... y así sucesivamente
+        }
+
+        window.onload = updateMenu;
+    </script>
 </body>
 </html>
