@@ -11,7 +11,7 @@
         <div id="game-container">
             <div id="instruction-panel">
                 <div id="progress-tag">Cas <span id="current-ex">1</span> / 10</div>
-                <p id="guide-text">Est-ce un triangle RECTANGLE ?</p>
+                <p id="guide-text">Vérifie si ce triangle est RECTANGLE.</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
@@ -22,10 +22,7 @@
                 <div class="draggable" draggable="true" id="val3">?</div>
             </div>
 
-            <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-a">?</div>
-            <div class="drop-label" id="label-b">?</div>
-
-            <div id="step-panel" class="hidden">
+            <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-a">?</div> <div class="drop-label" id="label-b">?</div> <div id="step-panel" class="hidden">
                 <h3 style="text-align:center; color:#9b59b6; margin-bottom:15px;">Vérification</h3>
                 
                 <div class="step">
@@ -38,15 +35,15 @@
                     <input type="number" id="step-c2" placeholder="Plus long">
                 </div>
                 
-                <div id="decision-zone" class="hidden" style="margin-top:20px; text-align:center; border-top: 2px solid #eee; padding-top:10px;">
-                    <p style="font-weight:bold; margin-bottom:10px;">Les résultats sont égaux ?</p>
+                <div id="decision-zone" class="hidden">
+                    <p style="font-weight:bold; margin-bottom:10px; text-align:center;">Les résultats sont égaux ?</p>
                     <div style="display:flex; gap:10px; justify-content:center;">
                         <button class="btn-verdict vrai" onclick="checkVerdict(true)">OUI (Vrai) ✅</button>
                         <button class="btn-verdict faux" onclick="checkVerdict(false)">NON (Faux) ❌</button>
                     </div>
                 </div>
 
-                <div id="calc-integration" style="margin-top:15px;">
+                <div id="calc-integration">
                     <button id="calc-toggle" onclick="toggleCalc()">🖩 CALCULATRICE</button>
                     <div id="mini-calc" class="hidden">
                         <div id="calc-display">0</div>
