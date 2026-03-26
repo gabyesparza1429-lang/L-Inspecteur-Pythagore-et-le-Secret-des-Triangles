@@ -15,7 +15,7 @@ function loadLevel() {
     const data = missionData[currentLevel];
     document.getElementById('current-ex').innerText = currentLevel + 1;
     
-    // Pinta los números en las cajas amarillas
+    // Pinta los números en las cajas amarillas del inventario
     document.getElementById('val1').innerText = data.a;
     document.getElementById('val2').innerText = data.b;
     
@@ -66,12 +66,13 @@ document.querySelectorAll('.drop-label').forEach(t => {
     });
 });
 
-// 5. VALIDACIÓN PASO A PASO (INCLUYE ERROR EN RAÍZ)
+// 5. VALIDACIÓN PASO A PASO (CON ERROR EN RAÍZ)
 const inputIds = ['step-a2', 'step-b2', 'step-sum', 'step-sqrt'];
 
 inputIds.forEach((id, idx) => {
     const input = document.getElementById(id);
     
+    // Usamos 'change' para validar cuando Sergio termina de escribir
     input.addEventListener('change', () => {
         const val = parseInt(input.value);
         if (isNaN(val)) return;
@@ -82,10 +83,10 @@ inputIds.forEach((id, idx) => {
 
         if (id === 'step-a2') {
             isCorrect = (val === data.a ** 2);
-            msg = (val === data.a) ? "Attention Sergio ! Calcule le CARRÉ (" + data.a + " x " + data.a + ")" : "C'est incorrect, calcule le carré.";
+            msg = (val === data.a) ? "Attention Sergio ! Calcule le CARRÉ (" + data.a + " x " + data.a + ")" : "Le carré est incorrect.";
         } else if (id === 'step-b2') {
             isCorrect = (val === data.b ** 2);
-            msg = (val === data.b) ? "N'oublie pas le CARRÉ de " + data.b : "C'est incorrect.";
+            msg = (val === data.b) ? "N'oublie pas le CARRÉ de " + data.b : "Le carré est incorrect.";
         } else if (id === 'step-sum') {
             isCorrect = (val === (data.a**2 + data.b**2));
             msg = "L'addition est fausse, Sergio !";
@@ -97,8 +98,11 @@ inputIds.forEach((id, idx) => {
         if (isCorrect) {
             input.style.borderColor = "#2ecc71";
             input.classList.remove('input-error');
-            if (id === 'step-sqrt') document.getElementById('bravo-modal').classList.remove('hidden');
-            else document.getElementById(inputIds[idx + 1]).focus();
+            if (id === 'step-sqrt') {
+                document.getElementById('bravo-modal').classList.remove('hidden');
+            } else {
+                document.getElementById(inputIds[idx + 1]).focus();
+            }
         } else {
             input.classList.add('input-error');
             showError(msg);
@@ -107,12 +111,21 @@ inputIds.forEach((id, idx) => {
     });
 });
 
-// 6. CALCULADORA
+// 6. LÓGICA DE LA CALCULADORA
 let currentCalc = "";
 function toggleCalc() { document.getElementById('mini-calc').classList.toggle('hidden'); }
-function calcInput(num) { currentCalc += num; document.getElementById('calc-display').innerText = currentCalc; }
-function calcOp(op) { currentCalc += " " + op + " "; document.getElementById('calc-display').innerText = currentCalc; }
-function calcClear() { currentCalc = ""; document.getElementById('calc-display').innerText = "0"; }
+function calcInput(num) { 
+    currentCalc += num; 
+    document.getElementById('calc-display').innerText = currentCalc; 
+}
+function calcOp(op) { 
+    currentCalc += " " + op + " "; 
+    document.getElementById('calc-display').innerText = currentCalc; 
+}
+function calcClear() { 
+    currentCalc = ""; 
+    document.getElementById('calc-display').innerText = "0"; 
+}
 function calcRes() { 
     try { 
         currentCalc = eval(currentCalc.replace('×', '*').replace('÷', '/')).toString(); 
@@ -122,7 +135,8 @@ function calcRes() {
 function calcSqrt() { 
     try { 
         let val = eval(currentCalc.replace('×', '*').replace('÷', '/'));
-        currentCalc = (Math.round(Math.sqrt(val) * 100) / 100).toString(); 
+        let res = Math.sqrt(val);
+        currentCalc = (Math.round(res * 100) / 100).toString(); 
         document.getElementById('calc-display').innerText = "√ = " + currentCalc; 
     } catch(e) { calcClear(); } 
 }
@@ -131,10 +145,15 @@ function calcSqrt() {
 function nextLevel() {
     document.getElementById('bravo-modal').classList.add('hidden');
     currentLevel++;
-    if(currentLevel < 10) loadLevel();
-    else { localStorage.setItem('mision1_completed', 'true'); window.location.href='index.html'; }
+    if(currentLevel < 10) {
+        loadLevel();
+    } else {
+        localStorage.setItem('mision1_completed', 'true'); 
+        window.location.href='index.html'; 
+    }
 }
 
+// 8. AJUSTE DE CANVAS E INICIO
 window.onload = () => {
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
