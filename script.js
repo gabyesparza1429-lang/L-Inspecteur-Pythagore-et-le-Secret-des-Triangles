@@ -1,31 +1,47 @@
-// Sistema de pistas para Sergio
-const pistas = [
-    "Utilise ta souris pour dessiner les trois côtés du triangle.",
-    "Glisse le chiffre 3 sur le premier carré vide de la formule.",
-    "Glisse el chiffre 4 sur le deuxième carré vide.",
-    "Maintenant, clique sur le bouton vert pour calculer !"
+let etape = 0;
+const messages = [
+    "1. Dessine le triangle sur la grille verte.",
+    "2. Glisse le '3' dans le premier carré de la formule.",
+    "3. Glisse le '4' dans le deuxième carré.",
+    "4. Super ! Clique sur VÉRIFIER."
 ];
-let pistaActual = 0;
 
-function darPista() {
-    const hintText = document.getElementById('hint-text');
-    hintText.innerText = pistas[pistaActual];
-    
-    // Resaltar visualmente el objetivo actual
-    if(pistaActual === 1 || pistaActual === 2) {
-        document.querySelectorAll('.drop-target').forEach(t => t.style.boxShadow = "0 0 20px yellow");
+function prochaineEtape() {
+    document.getElementById('instruction-text').innerText = messages[etape];
+    if (etape === 1 || etape === 2) {
+        document.querySelectorAll('.drop-target').forEach(t => t.classList.add('highlight'));
     }
-    
-    pistaActual = (pistaActual + 1) % pistas.length;
+    etape = (etape + 1) % messages.length;
 }
 
-// Lógica para que se vea la imagen aunque tenga espacios
-window.onload = () => {
-    const bg = document.getElementById('background-img');
-    bg.onerror = function() {
-        console.log("Error cargando imagen con espacios, intentando ruta alternativa...");
-        bg.src = "images/mision%201.png"; 
-    };
+// Lógica de dibujo simple
+const canvas = document.getElementById('drawing-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = 450; canvas.height = 300;
+let drawing = false;
+
+canvas.onmousedown = () => drawing = true;
+canvas.onmouseup = () => { drawing = false; ctx.beginPath(); };
+canvas.onmousemove = (e) => {
+    if(!drawing) return;
+    ctx.lineWidth = 5; ctx.strokeStyle = '#2ecc71';
+    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
 };
 
-// ... (mantén el resto del código de arrastrar y soltar que ya teníamos)
+// Drag and Drop
+document.querySelectorAll('.draggable').forEach(d => {
+    d.ondragstart = (e) => e.dataTransfer.setData('text', e.target.innerText);
+});
+
+document.querySelectorAll('.drop-target').forEach(t => {
+    t.ondragover = (e) => e.preventDefault();
+    t.ondrop = (e) => {
+        t.innerText = e.dataTransfer.getData('text');
+        t.classList.remove('highlight');
+        document.getElementById('check-btn').classList.remove('hidden');
+    };
+});
+
+function verifier() {
+    alert("Bravo Sergio ! 3² + 4² = 9 + 16 = 25. La racine de 25 est 5 !");
+}
