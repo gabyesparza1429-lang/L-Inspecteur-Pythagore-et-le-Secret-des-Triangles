@@ -3,38 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>L'Inspecteur Pythagore</title>
+    <title>Mission 1 - L'Hypoténuse</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="game-viewport">
         <div id="game-container">
-            <div class="bubble" id="sergio-help">
-                <p id="msg">Bonjour Sergio! Dessine le triangle et place le 3 et le 4.</p>
+            <div class="bubble">
+                <p id="guide-text">Étape 1: Glisse les mesures sur le triangle.</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
 
             <div id="inventory">
-                <div class="draggable" draggable="true">3</div>
-                <div class="draggable" draggable="true">4</div>
+                <div class="draggable" draggable="true" id="val1">3</div>
+                <div class="draggable" draggable="true" id="val2">4</div>
             </div>
 
-            <div id="formula-zone">
-                <div class="drop-target" id="t1">?</div>
-                <span>² + </span>
-                <div class="drop-target" id="t2">?</div>
-                <span>² = c²</span>
+            <div class="drop-label" id="label-a" style="top: 200px; left: 260px;">?</div>
+            <div class="drop-label" id="label-b" style="top: 320px; left: 450px;">?</div>
+
+            <div id="step-panel" class="hidden">
+                <h3>Calcul de l'Hypoténuse (c)</h3>
+                <div class="step">1. a² = <input type="number" id="step-a2"></div>
+                <div class="step">2. b² = <input type="number" id="step-b2"></div>
+                <div class="step">3. a² + b² = <input type="number" id="step-sum"></div>
+                <div class="step">4. √c² = <input type="number" id="step-sqrt"></div>
+                <button id="verify-calc" onclick="checkCalculs()">VÉRIFIER CALCULS</button>
             </div>
 
             <div class="ui-controls">
-                <button class="btn help" onclick="prochainePiste()">AIDE</button>
-                <button class="btn verify hidden" id="v-btn" onclick="verifier()">VÉRIFIER</button>
+                <button class="btn help" onclick="darPista()">AIDE</button>
             </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
