@@ -1,74 +1,72 @@
-let currentStep = 1;
+// ... (Mantén la lógica de dibujo y drag & drop del mensaje anterior) ...
+
+// Datos de los ejercicios
 const ejercicios = [
     { a: 3, b: 4, c: 5 },
-    { a: 6, b: 8, c: 10 }
+    { a: 6, b: 8, c: 10 },
+    { a: 5, b: 12, c: 13 }
 ];
 let exIndex = 0;
 
-const canvas = document.getElementById('drawing-canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = 800; canvas.height = 450;
+// Función para verificar cálculos mientras escribe (más rápido)
+const inputs = ['step-a2', 'step-b2', 'step-sum', 'step-sqrt'];
 
-// --- DIBUJO ---
-let drawing = false;
-canvas.onmousedown = () => drawing = true;
-window.onmouseup = () => { drawing = false; ctx.beginPath(); };
-canvas.onmousemove = (e) => {
-    if(!drawing) return;
-    ctx.lineWidth = 4; ctx.strokeStyle = '#2ecc71';
-    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
-};
+inputs.forEach((id, index) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+        const val = parseInt(el.value);
+        const ex = ejercicios[exIndex];
+        
+        // Valores correctos según el paso
+        let correct = false;
+        if (id === 'step-a2') correct = (val === ex.a * ex.a);
+        if (id === 'step-b2') correct = (val === ex.b * ex.b);
+        if (id === 'step-sum') correct = (val === (ex.a*ex.a + ex.b*ex.b));
+        if (id === 'step-sqrt') correct = (val === ex.c);
 
-// --- DRAG & DROP ---
-document.querySelectorAll('.draggable').forEach(d => {
-    d.ondragstart = (e) => e.dataTransfer.setData('text', e.target.innerText);
+        if (correct) {
+            el.classList.add('correct-input');
+            // Auto-foco al siguiente cuadro
+            if (index < inputs.length - 1) {
+                document.getElementById(inputs[index + 1]).focus();
+            }
+        } else {
+            el.classList.remove('correct-input');
+        }
+    });
 });
 
-document.querySelectorAll('.drop-label').forEach(t => {
-    t.ondragover = (e) => e.preventDefault();
-    t.ondrop = (e) => {
-        t.innerText = e.dataTransfer.getData('text');
-        t.style.background = "#d4efdf";
-        checkLabels();
-    };
-});
-
-function checkLabels() {
-    const lA = document.getElementById('label-a').innerText;
-    const lB = document.getElementById('label-b').innerText;
-    if (lA !== '?' && lB !== '?') {
-        document.getElementById('step-panel').classList.remove('hidden');
-    }
-}
-
-// --- VERIFICACIÓN PASO A PASO ---
 function checkCalculs() {
-    const ex = ejercicios[exIndex];
-    const a2 = parseInt(document.getElementById('step-a2').value);
-    const b2 = parseInt(document.getElementById('step-b2').value);
-    const sum = parseInt(document.getElementById('step-sum').value);
     const res = parseInt(document.getElementById('step-sqrt').value);
+    const ex = ejercicios[exIndex];
 
-    if (a2 === ex.a*ex.a && b2 === ex.b*ex.b && sum === (a2+b2) && res === ex.c) {
-        alert("¡Excelente trabajo Sergio! ¡Misión cumplida!");
+    if (res === ex.c) {
+        alert("BRAVO SERGIO! " + ex.a + "² + " + ex.b + "² = " + (ex.c*ex.c) + ". √" + (ex.c*ex.c) + " = " + ex.c);
         exIndex++;
         if (exIndex < ejercicios.length) {
             proximoEjercicio();
         } else {
-            alert("¡Has terminado todos los niveles de la Misión 1!");
+            alert("TU ES UN EXPERT EN PYTHAGORE!");
         }
     } else {
-        alert("Algo no cuadra... ¡Revisa tus multiplicaciones!");
+        alert("Oups! Vérifie tes calculs.");
     }
 }
 
 function proximoEjercicio() {
     const ex = ejercicios[exIndex];
-    // Resetear visualmente
+    // Resetear todo
     document.getElementById('label-a').innerText = '?';
     document.getElementById('label-b').innerText = '?';
     document.getElementById('step-panel').classList.add('hidden');
     document.getElementById('val1').innerText = ex.a;
     document.getElementById('val2').innerText = ex.b;
-    ctx.clearRect(0,0,800,450);
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('correct-input');
+    });
+    // Limpiar canvas
+    const canvas = document.getElementById('drawing-canvas');
+    canvas.getContext('2d').clearRect(0,0,800,450);
 }
