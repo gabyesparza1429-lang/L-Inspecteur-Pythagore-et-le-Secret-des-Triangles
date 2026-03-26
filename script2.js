@@ -1,131 +1,116 @@
 const missionData = [
-    {c:5, b:4, a:3}, {c:10, a:6, b:8}, {c:13, b:12, a:5},
-    {c:15, a:9, b:12}, {c:17, b:15, a:8}, {c:20, a:12, b:16},
-    {c:25, b:24, a:7}, {c:26, a:10, b:24}, {c:29, b:21, a:20}, {c:25, a:15, b:20}
+    {c:5, b:4, a:3}, {c:10, b:8, a:6}, {c:13, b:12, a:5},
+    {c:15, b:12, a:9}, {c:17, b:15, a:8}, {c:20, b:16, a:12},
+    {c:25, b:24, a:7}, {c:26, b:24, a:10}, {c:29, b:21, a:20}, {c:25, b:20, a:15}
 ];
 
 let currentLevel = 0;
+const container = document.getElementById('game-container');
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
 
 function loadLevel() {
     const data = missionData[currentLevel];
     document.getElementById('current-ex').innerText = currentLevel + 1;
-    
-    // CORRECCIÓN: Aquí ponemos los números en las cajas amarillas (val1 y val2)
     document.getElementById('val1').innerText = data.c;
-    document.getElementById('val2').innerText = (data.a || data.b);
+    document.getElementById('val2').innerText = data.b;
     
-    // Resetear etiquetas del triángulo
     document.getElementById('label-c').innerText = "?";
     document.getElementById('label-b').innerText = "?";
-    document.getElementById('label-c').style.backgroundColor = "rgba(255,255,255,0.8)";
-    document.getElementById('label-b').style.backgroundColor = "rgba(255,255,255,0.8)";
+    document.getElementById('label-c').style.backgroundColor = "rgba(255,255,255,0.85)";
+    document.getElementById('label-b').style.backgroundColor = "rgba(255,255,255,0.85)";
     
-    // Ocultar panel de cálculos hasta que arrastre los números
     document.getElementById('step-panel').classList.add('hidden');
-    
-    // Limpiar inputs
     document.querySelectorAll('input').forEach(i => { 
-        i.value = ""; 
-        i.style.borderColor = "#bdc3c7"; 
-        i.classList.remove('input-error');
+        i.value = ""; i.style.borderColor = "#bdc3c7"; i.classList.remove('input-error');
     });
-    
-    // Limpiar dibujo
-    if(canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-// Control de Modales (Mantenemos lo que te gustó)
 function showError(msg) {
     document.getElementById('error-msg').innerText = msg;
     document.getElementById('error-modal').classList.remove('hidden');
 }
+
 function closeError() { document.getElementById('error-modal').classList.add('hidden'); }
 
-// Drag & Drop con validación de hipotenusa
 document.querySelectorAll('.draggable').forEach(d => {
-    d.ondragstart = (e) => e.dataTransfer.setData('text', e.target.innerText);
+    d.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', e.target.innerText));
 });
 
 document.querySelectorAll('.drop-label').forEach(t => {
-    t.ondragover = (e) => e.preventDefault();
-    t.ondrop = (e) => {
-        const val = parseInt(e.dataTransfer.getData('text'));
+    t.addEventListener('dragover', (e) => e.preventDefault());
+    t.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const valor = parseInt(e.dataTransfer.getData('text'));
         const data = missionData[currentLevel];
-        
-        // Error si intenta poner el cateto en la hipotenusa
-        if(t.id === 'label-c' && val !== data.c) {
-            showError("Attention Sergio ! L'hypoténuse est le côté le plus long (" + data.c + "). Elle doit aller sur le côté diagonal.");
+
+        // VALIDACIÓN CRÍTICA: La hipotenusa debe ir en label-c
+        if (t.id === 'label-c' && valor !== data.c) {
+            showError("Attention Sergio ! L'hypoténuse (" + data.c + ") est le côté le plus long. Elle doit aller sur la diagonale.");
             return;
         }
-        
-        t.innerText = val;
+
+        t.innerText = valor;
         t.style.backgroundColor = "#d4efdf";
         
-        if(document.getElementById('label-c').innerText !== '?' && document.getElementById('label-b').innerText !== '?') {
+        if (document.getElementById('label-c').innerText !== '?' && document.getElementById('label-b').innerText !== '?') {
             document.getElementById('step-panel').classList.remove('hidden');
+            document.getElementById('step-c2').focus();
         }
-    };
+    });
 });
 
-// Validación de Teclado (Detecta si olvidó el cuadrado)
 const inputIds = ['step-c2', 'step-a2', 'step-minus', 'step-sqrt'];
 inputIds.forEach((id, idx) => {
     const input = document.getElementById(id);
-    
     input.addEventListener('change', () => {
         const val = parseInt(input.value);
+        if (isNaN(val)) return;
         const data = missionData[currentLevel];
-        if(id === 'step-c2' && val === data.c) {
-            showError("Attention Sergio ! Ici c'est le CARRÉ (c²). Tu dois multiplier " + data.c + " x " + data.c);
-            input.value = ""; input.classList.add('input-error'); return;
-        }
-        const lado = (data.a || data.b);
-        if(id === 'step-a2' && val === lado) {
-            showError("N'oublie pas le CARRÉ ! Multiplie " + lado + " x " + lado);
-            input.value = ""; input.classList.add('input-error'); return;
-        }
-    });
+        let isCorrect = false;
+        let msg = "";
 
-    input.addEventListener('input', () => {
-        const val = parseInt(input.value);
-        const data = missionData[currentLevel];
-        let correct = false;
-        const c2 = data.c ** 2;
-        const b2 = (data.a || data.b) ** 2;
-
-        if(id === 'step-c2') correct = (val === c2);
-        if(id === 'step-a2') correct = (val === b2);
-        if(id === 'step-minus') correct = (val === (c2 - b2));
-        if(id === 'step-sqrt') {
-            // El resultado es el lado que NO arrastró (la incógnita)
-            const incognita = (data.a === parseInt(document.getElementById('label-b').innerText)) ? data.b : data.a;
-            if (val === data.a || val === data.b) correct = (val**2 === (c2 - b2));
+        if (id === 'step-c2') {
+            isCorrect = (val === data.c ** 2);
+            msg = (val === data.c) ? "Calcule le CARRÉ (c²) !" : "Incorrect.";
+        } else if (id === 'step-a2') {
+            isCorrect = (val === data.b ** 2);
+            msg = (val === data.b) ? "Calcule le CARRÉ du côté !" : "Incorrect.";
+        } else if (id === 'step-minus') {
+            isCorrect = (val === (data.c**2 - data.b**2));
+            msg = "La soustraction est fausse ! (c² - a²)";
+        } else if (id === 'step-sqrt') {
+            isCorrect = (val === data.a);
+            msg = "La racine est incorrecte. Utilise la touche √ !";
         }
 
-        if(correct) {
+        if (isCorrect) {
             input.style.borderColor = "#2ecc71";
             input.classList.remove('input-error');
-            if(id === 'step-sqrt') {
-                document.getElementById('bravo-modal').classList.remove('hidden');
-                // Guardar progreso para el menú
-                localStorage.setItem('mision2_completed', 'true');
-            } else {
-                document.getElementById(inputIds[idx+1]).focus();
-            }
+            if (id === 'step-sqrt') document.getElementById('bravo-modal').classList.remove('hidden');
+            else document.getElementById(inputIds[idx + 1]).focus();
+        } else {
+            input.classList.add('input-error');
+            showError(msg);
+            input.value = "";
         }
     });
 });
+
+// Calculadora
+let currentCalc = "";
+function toggleCalc() { document.getElementById('mini-calc').classList.toggle('hidden'); }
+function calcInput(n) { currentCalc += n; document.getElementById('calc-display').innerText = currentCalc; }
+function calcOp(o) { currentCalc += " " + o + " "; document.getElementById('calc-display').innerText = currentCalc; }
+function calcClear() { currentCalc = ""; document.getElementById('calc-display').innerText = "0"; }
+function calcRes() { try { currentCalc = eval(currentCalc.replace('×', '*').replace('÷', '/')).toString(); document.getElementById('calc-display').innerText = currentCalc; } catch(e) { calcClear(); } }
+function calcSqrt() { try { let v = eval(currentCalc.replace('×', '*').replace('÷', '/')); currentCalc = (Math.round(Math.sqrt(v) * 100) / 100).toString(); document.getElementById('calc-display').innerText = "√ = " + currentCalc; } catch(e) { calcClear(); } }
 
 function nextLevel() {
     document.getElementById('bravo-modal').classList.add('hidden');
     currentLevel++;
     if(currentLevel < 10) loadLevel();
-    else {
-        alert("FÉLICITATIONS SERGIO ! TU AS FINI LA MISSION 2 !");
-        window.location.href = 'index.html'; // Volver al menú
-    }
+    else { localStorage.setItem('mision2_completed', 'true'); window.location.href='index.html'; }
 }
 
 window.onload = () => {
