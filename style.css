@@ -1,96 +1,53 @@
-/* --- ESTILOS DE LA CALCULADORA FLOTANTE --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a1a; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; font-family: 'Comic Sans MS', sans-serif; }
 
-/* Botón circular que abre la calculadora */
+#game-container {
+    position: relative; width: 95vw; height: 90vh; max-width: 1000px;
+    background-image: url('images/mision1.png'); background-size: 100% 100%;
+    border: 5px solid white; border-radius: 20px;
+}
+
+#instruction-panel {
+    position: absolute; top: 15px; right: 20px; width: 280px;
+    background: white; padding: 10px; border-radius: 15px; border: 3px solid #3498db; z-index: 100;
+}
+#progress-tag { background: #3498db; color: white; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: bold; display: inline-block; }
+#guide-text { font-size: 14px; font-weight: bold; color: #2c3e50; margin-top: 5px; }
+
+/* PANEL DE PASOS (Ajustado para contener la calculadora) */
+#step-panel {
+    position: absolute; right: 20px; top: 110px; width: 260px;
+    background: white; padding: 15px; border-radius: 15px; border: 4px solid #2ecc71; z-index: 100;
+    display: flex; flex-direction: column;
+}
+.step { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; font-size: 14px; }
+.step input { width: 75px; height: 35px; text-align: center; font-size: 18px; border: 2px solid #bdc3c7; border-radius: 5px; }
+
+/* ESTILOS DE LA CALCULADORA INTEGRADA */
+#calc-integration { margin-top: 15px; border-top: 2px solid #eee; padding-top: 10px; }
 #calc-toggle {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 60px;
-    height: 60px;
-    font-size: 30px;
-    background: #34495e;
-    color: white;
-    border: 3px solid #f1c40f;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%; padding: 10px; background: #34495e; color: white;
+    border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;
 }
+#mini-calc { background: #2c3e50; border-radius: 10px; padding: 10px; margin-top: 10px; }
+#calc-display { background: #ecf0f1; color: #2c3e50; text-align: right; padding: 5px 10px; font-size: 20px; font-family: monospace; border-radius: 5px; margin-bottom: 10px; min-height: 35px; }
+.calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.calc-buttons button { padding: 10px 5px; border: none; border-radius: 5px; background: #34495e; color: white; font-weight: bold; cursor: pointer; }
+.calc-buttons .op { background: #e67e22; }
 
-#calc-toggle:hover {
-    background: #2c3e50;
-    transform: scale(1.1);
-}
+/* Elementos del juego */
+.drop-label { position: absolute; width: 55px; height: 55px; background: rgba(255,255,255,0.8); border: 3px dashed #3498db; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10; border-radius: 8px; font-size: 20px;}
+#label-a { top: 42%; left: 45%; } 
+#label-b { top: 72%; left: 61%; }
+#inventory { position: absolute; left: 20px; top: 100px; z-index: 20; display: flex; flex-direction: column; gap: 15px; }
+.draggable { width: 65px; height: 65px; background: #f1c40f; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 26px; font-weight: bold; cursor: grab; box-shadow: 0 5px 0 #b7950b; }
 
-/* Cuerpo de la calculadora */
-#mini-calc {
-    position: absolute;
-    bottom: 90px;
-    left: 20px;
-    width: 220px;
-    background: #2c3e50;
-    border: 4px solid #f1c40f;
-    border-radius: 15px;
-    padding: 15px;
-    z-index: 1000;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-
-/* Pantalla de la calculadora */
-#calc-display {
-    background: #ecf0f1;
-    color: #2c3e50;
-    text-align: right;
-    padding: 10px;
-    font-size: 22px;
-    font-family: 'Courier New', Courier, monospace;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    min-height: 40px;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-}
-
-/* Rejilla de botones */
-.calc-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-}
-
-.calc-buttons button {
-    padding: 12px 0;
-    border: none;
-    border-radius: 8px;
-    background: #34495e;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.calc-buttons button:hover {
-    background: #5d6d7e;
-}
-
-/* Botones de operación (Naranja) */
-.calc-buttons .op {
-    background: #e67e22;
-}
-
-.calc-buttons .op:hover {
-    background: #d35400;
-}
-
-/* Botón igual (Verde) */
-.calc-buttons button[onclick="calcRes()"] {
-    background: #2ecc71;
-}
-
-/* Clase para ocultar (Importante) */
-.hidden {
-    display: none !important;
-}
+/* Modales y Errores */
+.modal { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: white; padding: 30px; border-radius: 25px; text-align: center; border: 6px solid #f1c40f; max-width: 400px; }
+.modal button { color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; background: #2ecc71; }
+.star { font-size: 50px; margin-bottom: 10px; }
+.input-error { border: 3px solid #e74c3c !important; background-color: #fdedec !important; animation: shake 0.3s; }
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(5px); } 50% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
+.hidden { display: none !important; }
+#drawing-canvas { position: absolute; inset: 0; z-index: 5; }
