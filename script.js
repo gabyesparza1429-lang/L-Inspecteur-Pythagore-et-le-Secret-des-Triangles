@@ -1,12 +1,25 @@
-let etapaActual = "arrastrar";
+let currentStep = 1;
+const ejercicios = [
+    { a: 3, b: 4, c: 5 },
+    { a: 6, b: 8, c: 10 }
+];
+let exIndex = 0;
+
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
-const container = document.getElementById('game-container');
+canvas.width = 800; canvas.height = 450;
 
-// Datos del ejercicio actual (podemos cambiarlos para el siguiente ejercicio)
-let currentEx = { a: 3, b: 4, c: 5 };
+// --- DIBUJO ---
+let drawing = false;
+canvas.onmousedown = () => drawing = true;
+window.onmouseup = () => { drawing = false; ctx.beginPath(); };
+canvas.onmousemove = (e) => {
+    if(!drawing) return;
+    ctx.lineWidth = 4; ctx.strokeStyle = '#2ecc71';
+    ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
+};
 
-// --- DRAG AND DROP ---
+// --- DRAG & DROP ---
 document.querySelectorAll('.draggable').forEach(d => {
     d.ondragstart = (e) => e.dataTransfer.setData('text', e.target.innerText);
 });
@@ -14,9 +27,8 @@ document.querySelectorAll('.draggable').forEach(d => {
 document.querySelectorAll('.drop-label').forEach(t => {
     t.ondragover = (e) => e.preventDefault();
     t.ondrop = (e) => {
-        const val = e.dataTransfer.getData('text');
-        t.innerText = val;
-        t.style.border = "2px solid #2ecc71";
+        t.innerText = e.dataTransfer.getData('text');
+        t.style.background = "#d4efdf";
         checkLabels();
     };
 });
@@ -24,56 +36,39 @@ document.querySelectorAll('.drop-label').forEach(t => {
 function checkLabels() {
     const lA = document.getElementById('label-a').innerText;
     const lB = document.getElementById('label-b').innerText;
-    
     if (lA !== '?' && lB !== '?') {
         document.getElementById('step-panel').classList.remove('hidden');
-        document.getElementById('guide-text').innerText = "Étape 2: Complète les calculs à droite.";
-        etapaActual = "calcular";
     }
 }
 
-// --- LÓGICA DE CÁLCULOS PASO A PASO ---
+// --- VERIFICACIÓN PASO A PASO ---
 function checkCalculs() {
+    const ex = ejercicios[exIndex];
     const a2 = parseInt(document.getElementById('step-a2').value);
     const b2 = parseInt(document.getElementById('step-b2').value);
     const sum = parseInt(document.getElementById('step-sum').value);
     const res = parseInt(document.getElementById('step-sqrt').value);
 
-    // Validación paso a paso para Sergio
-    if (a2 !== currentEx.a * currentEx.a) {
-        alert("Vérifie le premier carré (a²)");
-        return;
-    }
-    if (b2 !== currentEx.b * currentEx.b) {
-        alert("Vérifie le deuxième carré (b²)");
-        return;
-    }
-    if (sum !== (a2 + b2)) {
-        alert("Vérifie l'addition des deux carrés");
-        return;
-    }
-    if (res !== currentEx.c) {
-        alert("Quelle est la racine carrée de " + sum + " ?");
-        return;
-    }
-
-    alert("BRAVO SERGIO ! Tu as trouvé l'hypoténuse : " + res);
-    nextExercise();
-}
-
-function darPista() {
-    if (etapaActual === "arrastrar") {
-        alert("Glisse les nombres 3 et 4 sur les côtés du triangle.");
+    if (a2 === ex.a*ex.a && b2 === ex.b*ex.b && sum === (a2+b2) && res === ex.c) {
+        alert("¡Excelente trabajo Sergio! ¡Misión cumplida!");
+        exIndex++;
+        if (exIndex < ejercicios.length) {
+            proximoEjercicio();
+        } else {
+            alert("¡Has terminado todos los niveles de la Misión 1!");
+        }
     } else {
-        alert("Calcule le carré de chaque nombre (nombres x lui-même).");
+        alert("Algo no cuadra... ¡Revisa tus multiplicaciones!");
     }
 }
 
-// Para añadir más ejercicios después
-function nextExercise() {
-    // Aquí cambiaremos currentEx a {a: 6, b: 8, c: 10} por ejemplo
-    alert("Passons à l'exercice suivant...");
-    location.reload(); // Por ahora reinicia, pero podemos hacerlo fluido
+function proximoEjercicio() {
+    const ex = ejercicios[exIndex];
+    // Resetear visualmente
+    document.getElementById('label-a').innerText = '?';
+    document.getElementById('label-b').innerText = '?';
+    document.getElementById('step-panel').classList.add('hidden');
+    document.getElementById('val1').innerText = ex.a;
+    document.getElementById('val2').innerText = ex.b;
+    ctx.clearRect(0,0,800,450);
 }
-
-// (Mantén aquí el código de dibujo del canvas anterior)
