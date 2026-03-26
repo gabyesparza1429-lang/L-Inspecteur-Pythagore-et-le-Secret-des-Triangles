@@ -1,69 +1,96 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* --- ESTILOS DE LA CALCULADORA FLOTANTE --- */
 
-body {
-    background: #1a1a1a;
+/* Botón circular que abre la calculadora */
+#calc-toggle {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    background: #34495e;
+    color: white;
+    border: 3px solid #f1c40f;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    font-family: 'Comic Sans MS', sans-serif;
 }
 
-#game-container {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 1000px;
-    /* ESTO ASEGURA QUE SE VEA LA IMAGEN */
-    background-image: url('images/mision1.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    border: 5px solid white;
-    border-radius: 20px;
+#calc-toggle:hover {
+    background: #2c3e50;
+    transform: scale(1.1);
 }
 
-/* CAMBIO SOLICITADO: Panel movido a la derecha para no tapar el título */
-#instruction-panel {
+/* Cuerpo de la calculadora */
+#mini-calc {
     position: absolute;
-    top: 20px;
-    right: 20px; /* Antes estaba en el centro (left 50%), ahora a la derecha */
-    width: 250px;
-    background: white;
-    padding: 10px;
+    bottom: 90px;
+    left: 20px;
+    width: 220px;
+    background: #2c3e50;
+    border: 4px solid #f1c40f;
     border-radius: 15px;
-    border: 3px solid #3498db;
-    z-index: 100;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    padding: 15px;
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
-#progress-tag {
-    background: #3498db;
-    color: white;
-    padding: 2px 8px;
+/* Pantalla de la calculadora */
+#calc-display {
+    background: #ecf0f1;
+    color: #2c3e50;
+    text-align: right;
+    padding: 10px;
+    font-size: 22px;
+    font-family: 'Courier New', Courier, monospace;
     border-radius: 8px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 5px;
+    margin-bottom: 12px;
+    min-height: 40px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
 }
 
-#guide-text { font-size: 14px; font-weight: bold; color: #2c3e50; }
+/* Rejilla de botones */
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
 
-/* Resto de elementos fijos */
-#drawing-canvas { position: absolute; inset: 0; z-index: 5; }
+.calc-buttons button {
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    background: #34495e;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
 
-#inventory { position: absolute; left: 20px; top: 100px; z-index: 20; display: flex; flex-direction: column; gap: 15px; }
-.draggable { width: 60px; height: 60px; background: #f1c40f; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; cursor: grab; }
+.calc-buttons button:hover {
+    background: #5d6d7e;
+}
 
-.drop-label { position: absolute; width: 50px; height: 50px; background: rgba(255,255,255,0.7); border: 2px dashed #3498db; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10; }
-#label-a { top: 42%; left: 45%; } 
-#label-b { top: 72%; left: 61%; }
+/* Botones de operación (Naranja) */
+.calc-buttons .op {
+    background: #e67e22;
+}
 
-#step-panel { position: absolute; right: 20px; top: 120px; width: 220px; background: white; padding: 15px; border-radius: 15px; border: 4px solid #2ecc71; z-index: 100; }
-.step { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
-.step input { width: 60px; text-align: center; font-weight: bold; }
+.calc-buttons .op:hover {
+    background: #d35400;
+}
 
-.modal { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-.modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; border: 6px solid #f1c40f; }
-.hidden { display: none !important; }
+/* Botón igual (Verde) */
+.calc-buttons button[onclick="calcRes()"] {
+    background: #2ecc71;
+}
+
+/* Clase para ocultar (Importante) */
+.hidden {
+    display: none !important;
+}
