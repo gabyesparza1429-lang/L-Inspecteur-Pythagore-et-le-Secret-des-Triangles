@@ -1,49 +1,69 @@
-/* ... (Todo lo anterior se mantiene, solo cambia estas partes) ... */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
+body {
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', sans-serif;
+}
+
+#game-container {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 1000px;
+    /* ESTO ASEGURA QUE SE VEA LA IMAGEN */
+    background-image: url('images/mision1.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border: 5px solid white;
+    border-radius: 20px;
+}
+
+/* CAMBIO SOLICITADO: Panel movido a la derecha para no tapar el título */
 #instruction-panel {
     position: absolute;
-    top: 15px;
-    right: 20px; /* Movido a la derecha */
-    width: 280px;
+    top: 20px;
+    right: 20px; /* Antes estaba en el centro (left 50%), ahora a la derecha */
+    width: 250px;
     background: white;
     padding: 10px;
     border-radius: 15px;
     border: 3px solid #3498db;
     z-index: 100;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 #progress-tag {
     background: #3498db;
     color: white;
-    padding: 3px 10px;
-    border-radius: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: bold;
     display: inline-block;
     margin-bottom: 5px;
 }
 
-#guide-text {
-    font-size: 14px;
-    color: #2c3e50;
-    font-weight: bold;
-    line-height: 1.2;
-}
+#guide-text { font-size: 14px; font-weight: bold; color: #2c3e50; }
 
-/* Mejora del Modal Bravo */
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 25px;
-    text-align: center;
-    border: 6px solid #f1c40f;
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+/* Resto de elementos fijos */
+#drawing-canvas { position: absolute; inset: 0; z-index: 5; }
 
-.star { font-size: 50px; margin-bottom: 10px; }
+#inventory { position: absolute; left: 20px; top: 100px; z-index: 20; display: flex; flex-direction: column; gap: 15px; }
+.draggable { width: 60px; height: 60px; background: #f1c40f; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; cursor: grab; }
 
-@keyframes popIn {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
+.drop-label { position: absolute; width: 50px; height: 50px; background: rgba(255,255,255,0.7); border: 2px dashed #3498db; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10; }
+#label-a { top: 42%; left: 45%; } 
+#label-b { top: 72%; left: 61%; }
+
+#step-panel { position: absolute; right: 20px; top: 120px; width: 220px; background: white; padding: 15px; border-radius: 15px; border: 4px solid #2ecc71; z-index: 100; }
+.step { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; }
+.step input { width: 60px; text-align: center; font-weight: bold; }
+
+.modal { position: absolute; inset: 0; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; border: 6px solid #f1c40f; }
+.hidden { display: none !important; }
