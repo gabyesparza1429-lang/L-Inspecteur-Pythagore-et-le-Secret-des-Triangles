@@ -5,67 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>L'Inspecteur Pythagore - Menu</title>
     <style>
-        body {
-            background: #1a1a1a;
-            color: white;
-            font-family: 'Comic Sans MS', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        h1 { font-size: 3rem; color: #f1c40f; text-shadow: 3px 3px #e67e22; margin-bottom: 50px; }
-        
-        .menu-container {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
+        body { background: #1a1a1a; color: white; font-family: 'Comic Sans MS', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        h1 { font-size: 2.5rem; color: #f1c40f; text-shadow: 3px 3px #e67e22; text-align: center; }
+        .menu-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 30px; }
         .mission-card {
-            width: 250px;
-            background: #2c3e50;
-            border: 5px solid white;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s, border-color 0.3s;
-            text-decoration: none;
-            color: white;
+            width: 200px; background: #2c3e50; border: 5px solid white; border-radius: 20px;
+            padding: 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            text-decoration: none; color: white;
         }
-
-        .mission-card:hover {
-            transform: scale(1.1);
-            border-color: #f1c40f;
-        }
-
+        .mission-card:hover { transform: scale(1.05); border-color: #f1c40f; }
         .m1 { border-color: #3498db; }
         .m2 { border-color: #e74c3c; }
-
-        .icon { font-size: 50px; margin-bottom: 15px; }
-        h2 { margin: 10px 0; }
-        p { font-size: 0.9rem; opacity: 0.8; }
+        .icon { font-size: 40px; }
+        .lock { font-size: 20px; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <h1>L'Inspecteur Pythagore</h1>
+    <p>Choisis ta mission, Sergio !</p>
 
     <div class="menu-container">
-        <a href="index.html" class="mission-card m1">
+        <a href="mision1.html" class="mission-card m1">
             <div class="icon">📐</div>
             <h2>MISSION 1</h2>
-            <p>L'Hypoténuse (Addition)</p>
+            <p>L'Hypoténuse</p>
         </a>
 
         <a href="mision2.html" class="mission-card m2">
             <div class="icon">🔑</div>
             <h2>MISSION 2</h2>
-            <p>Le Côté Manquant (Soustraction)</p>
+            <p>Le Côté Manquant</p>
+            <span class="lock">🔒 À débloquer</span>
         </a>
     </div>
 
