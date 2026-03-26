@@ -1,103 +1,47 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ... (mantén lo anterior y añade esto) ... */
 
-body {
-    background: #1a1a1a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    font-family: 'Arial', sans-serif;
-}
-
-/* El Viewport asegura que el juego quepa en la pantalla */
-#game-viewport {
-    width: 95vw;
-    height: 95vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#game-container {
-    position: relative;
-    width: 800px; /* Tamaño fijo de referencia */
-    height: 450px;
-    background-image: url('images/mision1.png');
-    background-size: contain; /* Ajusta la imagen al cuadro sin deformar */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #000;
-    border: 3px solid #3498db;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-/* Canvas sobre la imagen */
-#drawing-canvas {
+.drop-label {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 5;
-}
-
-/* Burbuja pequeña y clara */
-.bubble {
-    position: absolute;
-    top: 10px; left: 10px;
-    width: 220px;
-    background: white;
-    border: 2px solid #3498db;
-    border-radius: 10px;
-    padding: 8px;
-    font-size: 13px;
-    font-weight: bold;
-    z-index: 100;
-}
-
-#inventory {
-    position: absolute;
-    right: 20px; top: 100px;
-    display: flex; flex-direction: column; gap: 10px;
-    z-index: 20;
-}
-
-.draggable {
-    width: 45px; height: 45px;
-    background: #f1c40f;
-    border-radius: 8px;
-    display: flex; justify-content: center; align-items: center;
-    font-weight: bold; cursor: grab;
-    box-shadow: 0 3px 0 #b7950b;
-}
-
-#formula-zone {
-    position: absolute;
-    bottom: 20px; left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.9);
-    padding: 8px 15px;
-    border-radius: 20px;
-    display: flex; align-items: center; gap: 8px;
-    z-index: 50;
-}
-
-.drop-target {
-    width: 35px; height: 35px;
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.8);
     border: 2px dashed #3498db;
     display: flex; justify-content: center; align-items: center;
+    font-weight: bold; z-index: 10;
 }
 
-.ui-controls {
+#step-panel {
     position: absolute;
-    bottom: 20px; right: 20px;
-    display: flex; flex-direction: column; gap: 5px;
+    right: 20px; top: 50px;
+    width: 250px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 3px solid #2ecc71;
     z-index: 100;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
 }
 
-.btn {
-    padding: 8px 15px; border: none; border-radius: 5px;
-    font-weight: bold; cursor: pointer; color: white;
+#step-panel h3 { font-size: 14px; margin-bottom: 10px; color: #2c3e50; }
+
+.step { margin-bottom: 10px; font-weight: bold; font-size: 14px; }
+
+.step input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    text-align: center;
 }
-.help { background: #e67e22; }
-.verify { background: #2ecc71; }
-.hidden { display: none; }
+
+#verify-calc {
+    width: 100%;
+    padding: 10px;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.highlight-input { border: 2px solid #f1c40f !important; background: #fff9e6; }
