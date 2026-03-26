@@ -11,8 +11,10 @@
         <div id="game-container">
             <div id="instruction-panel">
                 <div id="progress-tag">Cas <span id="current-ex">1</span> / 10</div>
-                <p id="guide-text">Est-ce un triangle rectangle ? Vérifie la loi !</p>
+                <p id="guide-text">Vérifie si ce triangle est RECTANGLE.</p>
             </div>
+
+            <canvas id="drawing-canvas"></canvas>
 
             <div id="inventory">
                 <div class="draggable" draggable="true" id="val1">?</div>
@@ -20,28 +22,44 @@
                 <div class="draggable" draggable="true" id="val3">?</div>
             </div>
 
-            <div class="drop-label" id="label-c" style="top: 40%; left: 45%;">?</div>
-            <div class="drop-label" id="label-a" style="top: 45%; left: 30%;">?</div>
-            <div class="drop-label" id="label-b" style="top: 75%; left: 55%;">?</div>
+            <div class="drop-label" id="label-c">?</div> <div class="drop-label" id="label-a">?</div>
+            <div class="drop-label" id="label-b">?</div>
 
             <div id="step-panel" class="hidden">
-                <div class="step">a² + b² = <input type="number" id="step-sum" placeholder="Suma"></div>
-                <div class="step">c² = <input type="number" id="step-c2" placeholder="C²"></div>
+                <h3 style="text-align:center; color:#9b59b6; margin-bottom:10px;">Vérification</h3>
+                <div class="step">a² + b² = <input type="number" id="step-sum"></div>
+                <div class="step">c² (Hypo) = <input type="number" id="step-c2"></div>
                 
                 <div id="decision-zone" class="hidden">
-                    <p>Est-ce égal ?</p>
-                    <button class="btn-vrai" onclick="verdict(true)">VRAI ✅</button>
-                    <button class="btn-faux" onclick="verdict(false)">FAUX ❌</button>
+                    <p style="margin-bottom:10px; font-weight:bold;">Est-ce égal ?</p>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-verdict vrai" onclick="checkVerdict(true)">VRAI ✅</button>
+                        <button class="btn-verdict faux" onclick="checkVerdict(false)">FAUX ❌</button>
+                    </div>
+                </div>
+
+                <div id="calc-integration">
+                    <button id="calc-toggle" onclick="toggleCalc()">🖩 CALCULATRICE</button>
+                    <div id="mini-calc" class="hidden">
+                        <div id="calc-display">0</div>
+                        <div class="calc-buttons">
+                            <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
+                            <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
+                            <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
+                            <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button onclick="calcRes()" style="background:#2ecc71">=</button><button class="op" onclick="calcSqrt()" style="background:#9b59b6">√</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="bravo-modal" class="modal hidden">
-                <div class="modal-content"><h2>🌟 CORRECT !</h2><button onclick="nextLevel()">SUIVANT</button></div>
+                <div class="modal-content"><h2>🌟 EXCELLENT JUGE !</h2><button onclick="nextLevel()">SUIVANT ➔</button></div>
             </div>
+
             <div id="error-modal" class="modal hidden">
                 <div class="modal-content" style="border-color: #e74c3c;">
-                    <h2>⚠️ ERREUR DE JUGE</h2>
-                    <p id="error-msg">Vérifie bien tes calculs.</p>
+                    <h2>⚠️ MAUVAIS VERDICT</h2>
+                    <p id="error-msg"></p>
                     <button onclick="closeError()" style="background:#e74c3c;">REESSAYER</button>
                 </div>
             </div>
