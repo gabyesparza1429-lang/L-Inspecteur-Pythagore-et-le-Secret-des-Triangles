@@ -2,40 +2,36 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'Inspecteur Pythagore - Mission 1</title>
+    <title>L'Inspecteur Pythagore</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <img src="images/mission1.png" id="background-img" alt="Mission 1">
+        <img src="images/mision%201.png" id="background-img" class="mission-bg">
+        
+        <div id="inspector-hint" class="hint-bubble">
+            <p id="hint-text">¡Hola Sergio! Empieza dibujando el triángulo sobre la cuadrícula.</p>
+        </div>
 
         <canvas id="drawing-canvas"></canvas>
-
-        <div id="instruction-banner">Dessine le triangle et place les valeurs !</div>
 
         <div id="inventory">
             <div class="draggable" draggable="true" id="val-3" data-value="3">3</div>
             <div class="draggable" draggable="true" id="val-4" data-value="4">4</div>
         </div>
 
-        <div id="formula-board">
-            <div class="drop-target" id="target-a" data-required="3">?</div>
-            <span class="symbol">²</span>
-            <span class="symbol">+</span>
-            <div class="drop-target" id="target-b" data-required="4">?</div>
-            <span class="symbol">²</span>
-            <span class="symbol">=</span>
-            <div id="result-box">c²</div>
+        <div id="formula-drop-zone">
+            <div class="drop-target" id="target-a">?</div>
+            <span>² + </span>
+            <div class="drop-target" id="target-b">?</div>
+            <span>² = c²</span>
         </div>
 
-        <button id="check-btn" class="hidden">Calculer l'Hypoténuse</button>
+        <div class="controls">
+            <button id="help-btn" onclick="darPista()">Obtenir de l'aide</button>
+            <button id="check-btn" class="hidden" onclick="verificarMision1()">Calculer l'Hypoténuse</button>
+        </div>
     </div>
-
-    <audio id="snd-drop" src="sounds/drop.mp3"></audio>
-    <audio id="snd-success" src="sounds/success.mp3"></audio>
-    <audio id="snd-error" src="sounds/error.mp3"></audio>
-
     <script src="script.js"></script>
 </body>
 </html>
