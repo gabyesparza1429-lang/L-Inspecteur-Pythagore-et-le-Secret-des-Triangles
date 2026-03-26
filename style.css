@@ -23,17 +23,105 @@ body { background: #1a1a1a; display: flex; justify-content: center; align-items:
 .step { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; font-size: 14px; }
 .step input { width: 75px; height: 35px; text-align: center; font-size: 18px; border: 2px solid #bdc3c7; border-radius: 5px; }
 
-/* ESTILOS DE LA CALCULADORA INTEGRADA */
-#calc-integration { margin-top: 15px; border-top: 2px solid #eee; padding-top: 10px; }
-#calc-toggle {
-    width: 100%; padding: 10px; background: #34495e; color: white;
-    border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px;
+/* --- CALCULATRICE INTEGRÉE --- */
+
+#calc-integration {
+    margin-top: 15px;
+    border-top: 2px solid #eee;
+    padding-top: 10px;
+    width: 100%;
 }
-#mini-calc { background: #2c3e50; border-radius: 10px; padding: 10px; margin-top: 10px; }
-#calc-display { background: #ecf0f1; color: #2c3e50; text-align: right; padding: 5px 10px; font-size: 20px; font-family: monospace; border-radius: 5px; margin-bottom: 10px; min-height: 35px; }
-.calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-.calc-buttons button { padding: 10px 5px; border: none; border-radius: 5px; background: #34495e; color: white; font-weight: bold; cursor: pointer; }
-.calc-buttons .op { background: #e67e22; }
+
+/* Botón para abrir/cerrar */
+#calc-toggle {
+    width: 100%;
+    padding: 12px;
+    background: #34495e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px; /* Más grande para que Sergio lo vea claro */
+    transition: background 0.3s;
+}
+
+#calc-toggle:hover {
+    background: #2c3e50;
+}
+
+/* Cuerpo de la calculadora */
+#mini-calc {
+    background: #2c3e50;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Pantalla de números */
+#calc-display {
+    background: #ecf0f1;
+    color: #2c3e50;
+    text-align: right;
+    padding: 8px 12px;
+    font-size: 22px;
+    font-family: monospace;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Rejilla de botones (4 columnas) */
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.calc-buttons button {
+    padding: 12px 5px;
+    border: none;
+    border-radius: 6px;
+    background: #34495e;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.calc-buttons button:active {
+    transform: scale(0.95);
+}
+
+/* Color para operadores (+, -, x, /) */
+.calc-buttons .op {
+    background: #e67e22;
+}
+
+/* Color para el botón de Raíz Cuadrada (Morado) */
+.calc-buttons button[onclick="calcSqrt()"] {
+    background: #9b59b6;
+}
+
+/* Color para el igual (Verde) */
+.calc-buttons button[onclick="calcRes()"] {
+    background: #2ecc71;
+}
+
+/* Color para borrar (Rojo) */
+.calc-buttons button[onclick="calcClear()"] {
+    background: #e74c3c;
+}
+
+/* Clase para ocultar/mostrar */
+.hidden {
+    display: none !important;
+}
 
 /* Elementos del juego */
 .drop-label { position: absolute; width: 55px; height: 55px; background: rgba(255,255,255,0.8); border: 3px dashed #3498db; display: flex; justify-content: center; align-items: center; font-weight: bold; z-index: 10; border-radius: 8px; font-size: 20px;}
