@@ -39,23 +39,12 @@
             align-items: center;
         }
 
-        /* Estilos cuando está BLOQUEADO */
-        .locked {
-            opacity: 0.5;
-            cursor: not-allowed;
-            filter: grayscale(1);
-        }
-
-        /* Estilos cuando está DESBLOQUEADO */
-        .unlocked {
-            opacity: 1;
-            cursor: pointer;
-            filter: grayscale(0);
-            border-color: white;
-        }
+        /* Estados */
+        .locked { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); pointer-events: none; }
+        .unlocked { opacity: 1; cursor: pointer; filter: grayscale(0); border-color: white; }
         .unlocked:hover { transform: scale(1.05); }
 
-        /* Colores de borde por misión si están abiertas */
+        /* Colores por Misión */
         .m1.unlocked { border-color: #3498db; }
         .m2.unlocked { border-color: #e74c3c; }
         .m3.unlocked { border-color: #9b59b6; }
@@ -63,13 +52,7 @@
 
         .icon { font-size: 50px; margin-bottom: 10px; }
         .status-label { font-size: 12px; font-weight: bold; margin-top: 10px; padding: 4px 10px; border-radius: 10px; background: #34495e; }
-        
-        .lock-overlay {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 20px;
-        }
+        .lock-overlay { position: absolute; top: 10px; right: 15px; font-size: 20px; }
     </style>
 </head>
 <body>
@@ -107,36 +90,41 @@
     </div>
 
     <script>
-        // LÓGICA DE DESBLOQUEO
         function updateMenu() {
-            // Revisamos qué niveles ha pasado Sergio
+            // Leemos el progreso desde la memoria del navegador
             const m1Passed = localStorage.getItem('mision1_completed');
             const m2Passed = localStorage.getItem('mision2_completed');
             const m3Passed = localStorage.getItem('mision3_completed');
 
-            // Si pasó la 1, desbloqueamos la 2
+            // Desbloqueo Misión 2
             if (m1Passed === 'true') {
-                const card2 = document.getElementById('card-m2');
-                card2.classList.remove('locked');
-                card2.classList.add('unlocked');
-                card2.href = "mision2.html";
-                card2.querySelector('.lock-overlay').innerText = "✅";
-                card2.querySelector('.status-label').innerText = "DÉBLOQUÉ";
-                card2.querySelector('.status-label').style.background = "#e74c3c";
+                const c2 = document.getElementById('card-m2');
+                c2.classList.replace('locked', 'unlocked');
+                c2.href = "mision2.html";
+                c2.querySelector('.lock-overlay').innerText = "✅";
+                c2.querySelector('.status-label').innerText = "DÉBLOQUÉ";
+                c2.querySelector('.status-label').style.background = "#e74c3c";
             }
 
-            // Si pasó la 2, desbloqueamos la 3
+            // Desbloqueo Misión 3
             if (m2Passed === 'true') {
-                const card3 = document.getElementById('card-m3');
-                card3.classList.remove('locked');
-                card3.classList.add('unlocked');
-                card3.href = "mision3.html";
-                card3.querySelector('.lock-overlay').innerText = "✅";
-                card3.querySelector('.status-label').innerText = "DÉBLOQUÉ";
-                card3.querySelector('.status-label').style.background = "#9b59b6";
+                const c3 = document.getElementById('card-m3');
+                c3.classList.replace('locked', 'unlocked');
+                c3.href = "mision3.html";
+                c3.querySelector('.lock-overlay').innerText = "✅";
+                c3.querySelector('.status-label').innerText = "DÉBLOQUÉ";
+                c3.querySelector('.status-label').style.background = "#9b59b6";
             }
 
-            // ... y así sucesivamente
+            // Desbloqueo Misión 4 (¡Lo que necesitabas!)
+            if (m3Passed === 'true') {
+                const c4 = document.getElementById('card-m4');
+                c4.classList.replace('locked', 'unlocked');
+                c4.href = "mision4.html";
+                c4.querySelector('.lock-overlay').innerText = "🔓";
+                c4.querySelector('.status-label').innerText = "OUVERT";
+                c4.querySelector('.status-label').style.background = "#2ecc71";
+            }
         }
 
         window.onload = updateMenu;
