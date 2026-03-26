@@ -113,8 +113,19 @@ function loadLevel() {
 function nextLevel() {
     document.getElementById('bravo-modal').classList.add('hidden');
     currentLevel++;
-    if(currentLevel < 10) { loadLevel(); } 
-    else { alert("FÉLICITATIONS SERGIO ! MISSION TERMINÉE !"); }
+    
+    if(currentLevel < 10) {
+        loadLevel();
+    } else {
+        // CAMBIO: Panel final de Misión 1 completada
+        const modalContent = document.querySelector('.modal-content');
+        modalContent.innerHTML = `
+            <h2>🏆 MISSION 1 COMPLÉTÉE !</h2>
+            <p>Tu es prêt pour le secret du côté manquant.</p>
+            <button onclick="window.location.href='mision2.html'">ALLER À LA MISSION 2 ➔</button>
+        `;
+        document.getElementById('bravo-modal').classList.remove('hidden');
+    }
 }
 
 // 6. DIBUJO (COMPATIBLE TOUCH)
