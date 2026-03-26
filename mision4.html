@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mission 4 - Le Maître de la Modélisation</title>
+    <link rel="stylesheet" href="style4.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="toolbox">
+            <h3>Caisse à Outils</h3>
+            <div class="tool-slot"><img src="https://img.icons8.com/fluency/48/pencil.png" class="tool"></div>
+            <div class="tool-slot"><img src="https://img.icons8.com/fluency/48/ruler.png" class="tool"></div>
+            <div class="tool-slot"><img src="https://img.icons8.com/fluency/48/math.png" class="tool"></div>
+            <div id="formula-display">a² + b² = c²</div>
+        </div>
+
+        <div id="blueprint-area">
+            <div id="header-tablet">
+                <div id="progress-tag">DÉFI <span id="current-ex">1</span> / 5</div>
+                <h2 id="mission-title">Modélisation Tactile</h2>
+            </div>
+            
+            <div id="canvas-container">
+                <canvas id="drawing-canvas"></canvas>
+                <div id="labels-layer"></div>
+            </div>
+
+            <div id="problem-text">Carga de situación...</div>
+        </div>
+
+        <div id="steps-column">
+            <h3>Étapes</h3>
+            <div class="step-box active" id="btn-read">1. Lire 📖</div>
+            <div class="step-box" id="btn-draw">2. Dessiner ✏️</div>
+            <div class="step-box" id="btn-calc">3. Calculer 🖩</div>
+        </div>
+
+        <div id="step-panel" class="hidden">
+            <div id="inputs-container"></div>
+            
+            <div id="calc-integration">
+                <button id="calc-toggle" onclick="toggleCalc()">🖩 CALCULATRICE</button>
+                <div id="mini-calc" class="hidden">
+                    <div id="calc-display">0</div>
+                    <div class="calc-buttons">
+                        <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
+                        <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
+                        <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
+                        <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button onclick="calcRes()" style="background:#2ecc71">=</button><button class="op" onclick="calcSqrt()" style="background:#9b59b6">√</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bravo-modal" class="modal hidden">
+            <div class="modal-content"><h2>🏆 GÉNIAL, SERGIO !</h2><p>Modèle terminé avec succès.</p><button onclick="nextLevel()">CONTINUER ➔</button></div>
