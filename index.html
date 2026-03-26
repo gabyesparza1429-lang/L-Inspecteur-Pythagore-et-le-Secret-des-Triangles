@@ -10,7 +10,7 @@
     <div id="game-viewport">
         <div id="game-container">
             <div class="bubble">
-                <p id="guide-text">Étape 1: Glisse les mesures sur le triangle.</p>
+                <p id="guide-text">Étape 1: Place les mesures. Étape 2: Utilise le clavier pour calculer.</p>
             </div>
 
             <canvas id="drawing-canvas"></canvas>
@@ -20,20 +20,17 @@
                 <div class="draggable" draggable="true" id="val2">4</div>
             </div>
 
-            <div class="drop-label" id="label-a" style="top: 200px; left: 260px;">?</div>
-            <div class="drop-label" id="label-b" style="top: 320px; left: 450px;">?</div>
+            <div class="drop-label" id="label-a">?</div>
+            <div class="drop-label" id="label-b">?</div>
 
             <div id="step-panel" class="hidden">
-                <h3>Calcul de l'Hypoténuse (c)</h3>
-                <div class="step">1. a² = <input type="number" id="step-a2"></div>
-                <div class="step">2. b² = <input type="number" id="step-b2"></div>
-                <div class="step">3. a² + b² = <input type="number" id="step-sum"></div>
-                <div class="step">4. √c² = <input type="number" id="step-sqrt"></div>
-                <button id="verify-calc" onclick="checkCalculs()">VÉRIFIER CALCULS</button>
-            </div>
-
-            <div class="ui-controls">
-                <button class="btn help" onclick="darPista()">AIDE</button>
+                <h3>Calcul de l'Hypoténuse</h3>
+                <div class="step">1. a² (3x3) = <input type="number" id="step-a2" placeholder="?"></div>
+                <div class="step">2. b² (4x4) = <input type="number" id="step-b2" placeholder="?"></div>
+                <div class="step">3. Somme = <input type="number" id="step-sum" placeholder="?"></div>
+                <div class="step">4. √ (Racine) = <input type="number" id="step-sqrt" placeholder="?"></div>
+                
+                <button id="verify-calc" onclick="checkCalculs()">VÉRIFIER</button>
             </div>
         </div>
     </div>
