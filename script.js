@@ -1,73 +1,98 @@
-// 1. CONFIGURACIÓN DE DATOS (10 EJERCICIOS)
 const missionData = [
     {a:3, b:4, c:5}, {a:6, b:8, c:10}, {a:5, b:12, c:13}, 
     {a:9, b:12, c:15}, {a:8, b:15, c:17}, {a:12, b:16, c:20},
     {a:7, b:24, c:25}, {a:20, b:21, c:29}, {a:10, b:24, c:26}, {a:15, b:20, c:25}
 ];
-let currentLevel = 0;
 
-// 2. INICIALIZACIÓN DE CANVAS
+let currentLevel = 0;
+const container = document.getElementById('game-container');
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
-const container = document.getElementById('game-container');
 
 function initCanvas() {
     canvas.width = container.clientWidth;
     canvas.height = container.clientHeight;
 }
 
-// 3. LÓGICA DE ARRASTRAR Y SOLTAR (CORREGIDA)
-function setupDragAndDrop() {
-    const draggables = document.querySelectorAll('.draggable');
-    const targets = document.querySelectorAll('.drop-label');
-
-    draggables.forEach(d => {
-        d.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', e.target.innerText);
-            e.target.style.opacity = "0.5";
-        });
-        d.addEventListener('dragend', (e) => {
-            e.target.style.opacity = "1";
-        });
+function loadLevel() {
+    const data = missionData[currentLevel];
+    document.getElementById('current-ex').innerText = currentLevel + 1;
+    document.getElementById('val1').innerText = data.a;
+    document.getElementById('val2').innerText = data.b;
+    
+    // Resetear labels del triángulo
+    const la = document.getElementById('label-a');
+    const lb = document.getElementById('label-b');
+    la.innerText = "?"; la.style.backgroundColor = "rgba(255,255,255,0.8)";
+    lb.innerText = "?"; lb.style.backgroundColor = "rgba(255,255,255,0.8)";
+    
+    // Ocultar paneles
+    document.getElementById('step-panel').classList.add('hidden');
+    document.getElementById('guide-text').innerText = "Glisse " + data.a + " et " + data.b + " sur le triangle.";
+    
+    // Limpiar inputs y errores
+    document.querySelectorAll('input').forEach(i => { 
+        i.value = ""; 
+        i.style.borderColor = "#bdc3c7"; 
+        i.classList.remove('input-error');
     });
-
-    targets.forEach(t => {
-        t.addEventListener('dragover', (e) => {
-            e.preventDefault(); // Crítico para permitir soltar
-            t.style.backgroundColor = "rgba(46, 204, 113, 0.3)";
-        });
-
-        t.addEventListener('dragleave', () => {
-            t.style.backgroundColor = "rgba(255,255,255,0.7)";
-        });
-
-        t.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const valorRecibido = e.dataTransfer.getData('text/plain');
-            t.innerText = valorRecibido;
-            t.style.backgroundColor = "#d4efdf";
-            t.style.border = "3px solid #2ecc71";
-            
-            checkIfBothDropped();
-        });
-    });
+    ctx.clearRect(0,0, canvas.width, canvas.height);
 }
+
+// --- SISTEMA DE ADVERTENCIAS (Retroalimentación para Sergio) ---
+function showError(msg) {
+    document.getElementById('error-msg').innerText = msg;
+    document.getElementById('error-modal').classList.remove('hidden');
+}
+function closeError() {
+    document.getElementById('error-modal').classList.add('hidden');
+}
+
+// --- DRAG AND DROP (Arrastrar números) ---
+document.querySelectorAll('.draggable').forEach(d => {
+    d.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', e.target.innerText));
+});
+
+document.querySelectorAll('.drop-label').forEach(t => {
+    t.addEventListener('dragover', (e) => e.preventDefault());
+    t.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const valorRecibido = e.dataTransfer.getData('text');
+        t.innerText = valorRecibido;
+        t.style.backgroundColor = "#d4efdf";
+        checkIfBothDropped();
+    });
+});
 
 function checkIfBothDropped() {
     const lA = document.getElementById('label-a').innerText;
     const lB = document.getElementById('label-b').innerText;
-    
     if (lA !== '?' && lB !== '?') {
         document.getElementById('step-panel').classList.remove('hidden');
-        document.getElementById('guide-text').innerText = "Bien! Maintenant, calcule les carrés.";
+        document.getElementById('guide-text').innerText = "Calcule les carrés et la somme.";
         document.getElementById('step-a2').focus();
     }
 }
 
-// 4. LÓGICA DE TECLADO (AUTO-SALTO)
+// --- VALIDACIÓN DE CALCULOS ---
 const inputIds = ['step-a2', 'step-b2', 'step-sum', 'step-sqrt'];
 inputIds.forEach((id, idx) => {
     const input = document.getElementById(id);
+    
+    // Detectar si puso el número normal (no el cuadrado) al perder el foco
+    input.addEventListener('change', () => {
+        const val = parseInt(input.value);
+        const data = missionData[currentLevel];
+        if (id === 'step-a2' && val === data.a) {
+            showError("Attention Sergio ! Calcule le CARRÉ (" + data.a + " x " + data.a + ")");
+            input.value = ""; input.classList.add('input-error');
+        }
+        if (id === 'step-b2' && val === data.b) {
+            showError("N'oublie pas le CARRÉ de " + data.b);
+            input.value = ""; input.classList.add('input-error');
+        }
+    });
+
     input.addEventListener('input', () => {
         const val = parseInt(input.value);
         const data = missionData[currentLevel];
@@ -80,7 +105,7 @@ inputIds.forEach((id, idx) => {
 
         if(correct) {
             input.style.borderColor = "#2ecc71";
-            input.style.backgroundColor = "#e8f8f5";
+            input.classList.remove('input-error');
             if(id === 'step-sqrt') {
                 document.getElementById('bravo-modal').classList.remove('hidden');
             } else {
@@ -90,90 +115,38 @@ inputIds.forEach((id, idx) => {
     });
 });
 
-// 5. CAMBIO DE NIVEL
-function loadLevel() {
-    const data = missionData[currentLevel];
-    document.getElementById('current-ex').innerText = currentLevel + 1;
-    document.getElementById('val1').innerText = data.a;
-    document.getElementById('val2').innerText = data.b;
-    
-    // Resetear labels
-    const la = document.getElementById('label-a');
-    const lb = document.getElementById('label-b');
-    la.innerText = "?"; la.style.backgroundColor = "rgba(255,255,255,0.7)"; la.style.border = "2px dashed #3498db";
-    lb.innerText = "?"; lb.style.backgroundColor = "rgba(255,255,255,0.7)"; lb.style.border = "2px dashed #3498db";
-    
-    document.getElementById('step-panel').classList.add('hidden');
-    document.getElementById('guide-text').innerText = "Glisse " + data.a + " et " + data.b + " sur le triangle.";
-    
-    document.querySelectorAll('input').forEach(i => { i.value = ""; i.style.borderColor = "#bdc3c7"; });
-    ctx.clearRect(0,0, canvas.width, canvas.height);
-}
-
 function nextLevel() {
     document.getElementById('bravo-modal').classList.add('hidden');
     currentLevel++;
-    
     if(currentLevel < 10) {
         loadLevel();
     } else {
-        // CAMBIO: Panel final de Misión 1 completada
+        localStorage.setItem('mision1_completed', 'true'); // Guardar progreso
         const modalContent = document.querySelector('.modal-content');
-        modalContent.innerHTML = `
-            <h2>🏆 MISSION 1 COMPLÉTÉE !</h2>
-            <p>Tu es prêt pour le secret du côté manquant.</p>
-            <button onclick="window.location.href='mision2.html'">ALLER À LA MISSION 2 ➔</button>
-        `;
+        modalContent.innerHTML = `<h2>🏆 MISSION COMPLÉTÉE !</h2><p>Félicitations Sergio !</p><button onclick="window.location.href='index.html'">RETOUR AU MENU</button>`;
         document.getElementById('bravo-modal').classList.remove('hidden');
     }
 }
 
-// 6. DIBUJO (COMPATIBLE TOUCH)
-let drawing = false;
-canvas.addEventListener('mousedown', () => drawing = true);
-canvas.addEventListener('touchstart', (e) => { drawing = true; e.preventDefault(); });
-window.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
-window.addEventListener('touchend', () => { drawing = false; ctx.beginPath(); });
-
-canvas.addEventListener('mousemove', (e) => {
-    if(!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    ctx.lineWidth = 4; ctx.strokeStyle = '#2ecc71'; ctx.lineCap = 'round';
-    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-    ctx.stroke(); ctx.beginPath(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-});
-
-// INICIO
-window.onload = () => {
-    initCanvas();
-    setupDragAndDrop();
-    loadLevel();
-
-// LÓGICA DE LA CALCULADORA
+// --- LÓGICA DE LA CALCULADORA INTEGRADA ---
 let currentCalc = "";
-
 function toggleCalc() {
     document.getElementById('mini-calc').classList.toggle('hidden');
 }
-
 function calcInput(num) {
     currentCalc += num;
     document.getElementById('calc-display').innerText = currentCalc;
 }
-
 function calcOp(op) {
     currentCalc += " " + op + " ";
     document.getElementById('calc-display').innerText = currentCalc;
 }
-
 function calcClear() {
     currentCalc = "";
     document.getElementById('calc-display').innerText = "0";
 }
-
 function calcRes() {
     try {
-        // eval realiza la operación matemática
         let result = eval(currentCalc.replace('×', '*').replace('÷', '/'));
         currentCalc = result.toString();
         document.getElementById('calc-display').innerText = currentCalc;
@@ -182,4 +155,9 @@ function calcRes() {
         currentCalc = "";
     }
 }
+
+// INICIO
+window.onload = () => {
+    initCanvas();
+    loadLevel();
 };
