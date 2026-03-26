@@ -3,35 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mission 1 - L'Hypoténuse</title>
+    <title>Pythagore Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-viewport">
-        <div id="game-container">
-            <div class="bubble">
-                <p id="guide-text">Étape 1: Place les mesures. Étape 2: Utilise le clavier pour calculer.</p>
-            </div>
+    <div id="game-container">
+        <canvas id="drawing-canvas"></canvas>
 
-            <canvas id="drawing-canvas"></canvas>
+        <div id="inventory">
+            <div class="draggable" draggable="true">3</div>
+            <div class="draggable" draggable="true">4</div>
+        </div>
 
-            <div id="inventory">
-                <div class="draggable" draggable="true" id="val1">3</div>
-                <div class="draggable" draggable="true" id="val2">4</div>
-            </div>
+        <div class="drop-label" id="label-a">?</div>
+        <div class="drop-label" id="label-b">?</div>
 
-            <div class="drop-label" id="label-a">?</div>
-            <div class="drop-label" id="label-b">?</div>
-
-            <div id="step-panel" class="hidden">
-                <h3>Calcul de l'Hypoténuse</h3>
-                <div class="step">1. a² (3x3) = <input type="number" id="step-a2" placeholder="?"></div>
-                <div class="step">2. b² (4x4) = <input type="number" id="step-b2" placeholder="?"></div>
-                <div class="step">3. Somme = <input type="number" id="step-sum" placeholder="?"></div>
-                <div class="step">4. √ (Racine) = <input type="number" id="step-sqrt" placeholder="?"></div>
-                
-                <button id="verify-calc" onclick="checkCalculs()">VÉRIFIER</button>
-            </div>
+        <div id="step-panel" class="hidden">
+            <div class="step">a² (3x3) = <input type="number" id="step-a2"></div>
+            <div class="step">b² (4x4) = <input type="number" id="step-b2"></div>
+            <div class="step">Somme = <input type="number" id="step-sum"></div>
+            <div class="step">√ (Racine) = <input type="number" id="step-sqrt"></div>
+            <button onclick="alert('Bravo Sergio!')" style="width:100%; padding:10px; background:#2ecc71; border:none; color:white; font-weight:bold; border-radius:5px;">VÉRIFIER</button>
         </div>
     </div>
     <script src="script.js"></script>
