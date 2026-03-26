@@ -3,40 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L'Inspecteur Pythagore - Menu</title>
+    <title>L'Inspecteur Pythagore - Menu Principal</title>
     <style>
-        body { background: #1a1a1a; color: white; font-family: 'Comic Sans MS', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        h1 { font-size: 2.5rem; color: #f1c40f; text-shadow: 3px 3px #e67e22; text-align: center; }
-        .menu-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 30px; }
-        .mission-card {
-            width: 200px; background: #2c3e50; border: 5px solid white; border-radius: 20px;
-            padding: 20px; text-align: center; cursor: pointer; transition: 0.3s;
-            text-decoration: none; color: white;
+        body {
+            background: #1a1a1a;
+            color: white;
+            font-family: 'Comic Sans MS', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
-        .mission-card:hover { transform: scale(1.05); border-color: #f1c40f; }
-        .m1 { border-color: #3498db; }
-        .m2 { border-color: #e74c3c; }
-        .icon { font-size: 40px; }
-        .lock { font-size: 20px; display: block; margin-top: 10px; }
+        h1 { font-size: 2.8rem; color: #f1c40f; text-shadow: 3px 3px #e67e22; text-align: center; margin-bottom: 10px; }
+        .subtitle { margin-bottom: 40px; font-size: 1.2rem; color: #bdc3c7; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .mission-card {
+            background: #2c3e50;
+            border: 5px solid white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .mission-card:hover { transform: translateY(-10px); }
+
+        /* Colores por Misión */
+        .m1 { border-color: #3498db; } .m1:hover { background: #3498db; }
+        .m2 { border-color: #e74c3c; } .m2:hover { background: #e74c3c; }
+        .m3 { border-color: #9b59b6; } .m3:hover { background: #9b59b6; }
+        .m4 { border-color: #2ecc71; } .m4:hover { background: #2ecc71; }
+
+        .icon { font-size: 50px; margin-bottom: 15px; }
+        h2 { margin: 10px 0; font-size: 1.3rem; }
+        .desc { font-size: 0.85rem; opacity: 0.9; min-height: 40px; }
+        
+        .btn-play {
+            margin-top: 15px;
+            background: white;
+            color: #1a1a1a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
     <h1>L'Inspecteur Pythagore</h1>
-    <p>Choisis ta mission, Sergio !</p>
+    <p class="subtitle">Choisis ta mission, Sergio !</p>
 
-    <div class="menu-container">
+    <div class="menu-grid">
         <a href="mision1.html" class="mission-card m1">
             <div class="icon">📐</div>
             <h2>MISSION 1</h2>
-            <p>L'Hypoténuse</p>
+            <p class="desc">L'Hypoténuse (Addition)</p>
+            <div class="btn-play">COMMENCER</div>
         </a>
 
         <a href="mision2.html" class="mission-card m2">
             <div class="icon">🔑</div>
             <h2>MISSION 2</h2>
-            <p>Le Côté Manquant</p>
-            <span class="lock">🔒 À débloquer</span>
+            <p class="desc">Le Côté Manquant (Soustraction)</p>
+            <div class="btn-play">COMMENCER</div>
+        </a>
+
+        <a href="mision3.html" class="mission-card m3">
+            <div class="icon">🔄</div>
+            <h2>MISSION 3</h2>
+            <p class="desc">La Réciproque (Vrai ou Faux?)</p>
+            <div class="btn-play">DÉBLOQUER</div>
+        </a>
+
+        <a href="mision4.html" class="mission-card m4">
+            <div class="icon">🏆</div>
+            <h2>MISSION 4</h2>
+            <p class="desc">Le Défi Final de Pythagore</p>
+            <div class="btn-play">DÉBLOQUER</div>
         </a>
     </div>
 
