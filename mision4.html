@@ -8,7 +8,7 @@
 <body>
     <div id="tablet-frame">
         <div id="toolbox">
-            <div class="tool-item" id="btn-pencil" onclick="enableDrawing()">
+            <div class="tool-item" id="btn-pencil">
                 <img src="https://img.icons8.com/fluency/48/pencil.png">
                 <span>CRAYON</span>
             </div>
@@ -35,9 +35,9 @@
 
         <div id="steps-sidebar">
             <h3>Modélisation</h3>
-            <div class="step-box active" id="s1" onclick="doStep(1)">1. Lire 📖</div>
-            <div class="step-box locked" id="s2" onclick="doStep(2)">2. Dessiner ✏️</div>
-            <div class="step-box locked" id="s3" onclick="doStep(3)">3. Calculer 🖩</div>
+            <div class="step-box active" id="s1">1. Lire 📖</div>
+            <div class="step-box locked" id="s2">2. Dessiner ✏️</div>
+            <div class="step-box locked" id="s3">3. Calculer 🖩</div>
         </div>
     </div>
 
@@ -63,5 +63,13 @@
     </div>
 
     <script src="script4.js"></script>
+    <script>
+        // Conectar el botón lápiz
+        document.getElementById('btn-pencil').addEventListener('click', enableDrawing);
+
+        // Conectar los pasos de forma segura
+        document.getElementById('s2').addEventListener('click', () => doStep(2));
+        document.getElementById('s3').addEventListener('click', () => doStep(3));
+    </script>
 </body>
 </html>
