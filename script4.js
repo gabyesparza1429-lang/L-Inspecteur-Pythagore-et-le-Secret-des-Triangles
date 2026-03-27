@@ -51,8 +51,8 @@ function resetLevel() {
 }
 
 // INICIALIZACIÓN
-window.addEventListener('DOMContentLoaded', () => {
-    // Inicializa canvas
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicialización del canvas
     canvas = document.getElementById('main-canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
@@ -71,7 +71,7 @@ window.addEventListener('DOMContentLoaded', () => {
         redraw();
     };
 
-    // Conectar botón Lire seguro
+    // 🔹 Conectar botón "Lire" de forma segura
     const btnLire = document.getElementById('s1');
     if(btnLire) btnLire.addEventListener('click', () => doStep(1));
 });
