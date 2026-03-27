@@ -1,5 +1,5 @@
 // ===============================
-// script4.js CORREGIDO
+// script4.js versión funcional
 // ===============================
 
 const misiones = [
@@ -18,10 +18,9 @@ let v = "";
 let canvas, ctx;
 
 // ===============================
-// Función init
+// Inicialización
 // ===============================
 function init() {
-    // Inicializar canvas
     canvas = document.getElementById('main-canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
@@ -29,13 +28,7 @@ function init() {
 
     resetLevel();
 
-    // Conectar botones
-    document.getElementById('btn-pencil').addEventListener('click', enableDrawing);
-    document.getElementById('s1').addEventListener('click', () => doStep(1));
-    document.getElementById('s2').addEventListener('click', () => doStep(2));
-    document.getElementById('s3').addEventListener('click', () => doStep(3));
-
-    // Eventos de dibujo
+    // Eventos canvas
     canvas.onmousedown = (e) => { if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; } };
     canvas.onmousemove = (e) => { if(painting) { redraw(); ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
     canvas.onmouseup = (e) => {
@@ -75,7 +68,7 @@ function resetLevel() {
 }
 
 // ===============================
-// doStep
+// Botón verde
 // ===============================
 function doStep(s) {
     if(s === 1) {
@@ -84,6 +77,8 @@ function doStep(s) {
         document.getElementById('s1').classList.remove('active');
         document.getElementById('s2').classList.add('active');
         document.getElementById('instruction-footer').innerText = "Étape 2: Active le Crayon et identifie les mesures.";
+    } else if(s === 2) {
+        enableDrawing();
     }
 }
 
@@ -171,6 +166,6 @@ function closeMsg() {
 }
 
 // ===============================
-// Iniciar todo al cargar el DOM
+// Inicializar al cargar
 // ===============================
-window.addEventListener('DOMContentLoaded', init);
+window.onload = init;
