@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Mission 4 - Sergio l'Architecte</title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="./style4.css">
+    <link rel="stylesheet" href="style4.css">
 </head>
 <body>
     <div id="tablet-frame">
         <div id="toolbox">
-            <div class="tool-item" id="btn-pencil">
+            <div class="tool-item" id="btn-pencil" onclick="enableDrawing()">
                 <img src="https://img.icons8.com/fluency/48/pencil.png">
                 <span>CRAYON</span>
             </div>
@@ -22,7 +21,7 @@
                 <h2 id="title-mission">Chargement...</h2>
             </div>
             
-            <div id="drawing-area" style="background-image: url('./mision4.png');">
+            <div id="drawing-area">
                 <canvas id="main-canvas"></canvas>
                 <div id="tag-a" class="measure-tag"></div>
                 <div id="tag-b" class="measure-tag"></div>
@@ -30,15 +29,15 @@
             </div>
 
             <div id="instruction-footer">
-                <p id="problem-desc">Clique sur "Lire" pour commencer.</p>
+                <p id="problem-desc">Clique sur "Lire" pour voir l'énoncé.</p>
             </div>
         </div>
 
         <div id="steps-sidebar">
             <h3>Modélisation</h3>
-            <div class="step-box active" id="s1">1. Lire 📖</div>
-            <div class="step-box locked" id="s2">2. Dessiner ✏️</div>
-            <div class="step-box locked" id="s3">3. Calculer 🖩</div>
+            <div class="step-box active" id="s1" onclick="doStep(1)">1. Lire 📖</div>
+            <div class="step-box locked" id="s2" onclick="doStep(2)">2. Dessiner ✏️</div>
+            <div class="step-box locked" id="s3" onclick="doStep(3)">3. Calculer 🖩</div>
         </div>
     </div>
 
@@ -46,12 +45,12 @@
         <div id="calc-body">
             <div id="calc-screen">0</div>
             <div class="calc-grid">
-                <button class="num-btn">7</button><button class="num-btn">8</button><button class="num-btn">9</button><button class="op-btn">*</button>
-                <button class="num-btn">4</button><button class="num-btn">5</button><button class="num-btn">6</button><button class="op-btn">-</button>
-                <button class="num-btn">1</button><button class="num-btn">2</button><button class="num-btn">3</button><button class="op-btn">+</button>
-                <button id="clr-btn" style="background:#ff7675">C</button><button class="num-btn">0</button><button id="sqrt-btn" class="op-btn">√</button><button id="equal-btn">=</button>
+                <button onclick="press('7')">7</button><button onclick="press('8')">8</button><button onclick="press('9')">9</button><button class="op" onclick="press('*')">×</button>
+                <button onclick="press('4')">4</button><button onclick="press('5')">5</button><button onclick="press('6')">6</button><button class="op" onclick="press('-')">-</button>
+                <button onclick="press('1')">1</button><button onclick="press('2')">2</button><button onclick="press('3')">3</button><button class="op" onclick="press('+')">+</button>
+                <button onclick="cls()" style="background:#ff7675">C</button><button onclick="press('0')">0</button><button class="op" onclick="solveSqrt()">√</button><button onclick="solve()">=</button>
             </div>
-            <button id="btn-validar">VALIDER LA RÉPONSE</button>
+            <button id="btn-validar" onclick="verify()">VALIDER LA RÉPONSE</button>
         </div>
     </div>
 
@@ -59,11 +58,10 @@
         <div id="msg-box">
             <h2 id="msg-title"></h2>
             <p id="msg-text"></p>
-            <button id="msg-btn">D'ACCORD</button>
+            <button id="msg-btn" onclick="closeMsg()">D'ACCORD</button>
         </div>
     </div>
 
-    <!-- JS -->
-    <script src="./script4.js"></script>
+    <script src="script4.js"></script>
 </body>
 </html>
