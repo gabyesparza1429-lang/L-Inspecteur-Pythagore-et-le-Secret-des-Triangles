@@ -8,23 +8,11 @@ const misiones = [
 ];
 
 let nivel = 0;
-let canDraw = false, painting = false;
-let startX, startY, lineasCount = 0;
-let historial = [];
-let v = ""; 
-
+let canDraw = false, painting = false, startX, startY, lineasCount = 0;
+let historial = [], v = ""; 
 let canvas, ctx;
 
-// --- INICIO DEL JUEGO ---
-window.onload = function() {
-    canvas = document.getElementById('main-canvas');
-    ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    
-    // Al cargar, lo primero es limpiar todo para el Nivel 1
-    resetLevel();
-};
+// --- FUNCIONES GLOBALES (PARA QUE EL BOTÓN LAS ENCUENTRE) ---
 
 function resetLevel() {
     lineasCount = 0; 
@@ -32,58 +20,75 @@ function resetLevel() {
     canDraw = false;
     v = ""; 
 
-    // Actualizar Interfaz
     document.getElementById('num-ex').innerText = nivel + 1;
     document.getElementById('title-mission').innerText = misiones[nivel].title;
-    
-    // CORRECCIÓN: Texto inicial antes de pulsar nada
-    document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour voir l'énoncé.";
+    document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour commencer.";
     document.getElementById('instruction-footer').innerText = "Étape 1: Lire l'énoncé du problème.";
     
     document.getElementById('calc-modal').classList.add('hidden');
     document.getElementById('calc-screen').innerText = "0";
     
-    // Limpiar etiquetas
     document.querySelectorAll('.measure-tag').forEach(t => {
         t.style.display = "none";
         t.innerText = "";
     });
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Resetear botones: Solo el 1 está activo
     document.getElementById('s1').className = "step-box active";
     document.getElementById('s2').className = "step-box locked";
     document.getElementById('s3').className = "step-box locked";
-    
     document.getElementById('btn-pencil').style.background = "#5499c7";
 }
 
-// --- PASO 1: LEER ---
 function doStep(s) {
     if (s === 1) {
-        // Ahora sí, mostramos el problema y pedimos identificar
         document.getElementById('problem-desc').innerText = misiones[nivel].desc;
-        
         document.getElementById('s1').classList.remove('active');
         document.getElementById('s2').classList.remove('locked');
         document.getElementById('s2').classList.add('active');
-        
         document.getElementById('instruction-footer').innerText = "Étape 2: Identifie les Côtés et l'Hypoténuse avec le Crayon.";
     }
 }
 
-// --- PASO 2: DIBUJAR ---
 function enableDrawing() {
-    // Solo si el paso 2 está activo
     if(document.getElementById('s2').classList.contains('locked')) return;
-    
     canDraw = true;
     document.getElementById('btn-pencil').style.background = "#39FF14";
     document.getElementById('instruction-footer').innerText = "Sergio, trace la ligne pour le Côté a.";
 }
 
-// --- LÓGICA DE DIBUJO ---
+// --- LÓGICA INTERNA ---
+
+window.onload = function() {
+    canvas = document.getElementById('main-canvas');
+    ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    canvas.onmousedown = (e) => {
+        if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; }
+    };
+
+    canvas.onmousemove = (e) => {
+        if (painting) {
+            redraw();
+            ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
+        }
+    };
+
+    canvas.onmouseup = (e) => {
+        if(!painting) return;
+        painting = false;
+        historial.push({x1: startX, y1: startY, x2: e.offsetX, y2: e.offsetY});
+        lineasCount++;
+        showTag(e.offsetX, e.offsetY);
+        redraw();
+    };
+
+    resetLevel();
+};
+
 function redraw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#39FF14'; ctx.lineWidth = 6; ctx.shadowBlur = 15; ctx.shadowColor = '#39FF14'; ctx.lineCap = "round";
@@ -92,45 +97,10 @@ function redraw() {
     });
 }
 
-// Mouse events corregidos para mayor precisión
-window.onmousedown = (e) => {
-    if(!canvas) return;
-    let rect = canvas.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
-    
-    if(x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
-        if(canDraw && lineasCount < 3) { painting = true; startX = x; startY = y; }
-    }
-};
-
-window.onmousemove = (e) => {
-    if (!painting) return;
-    let rect = canvas.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
-    redraw();
-    ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(x, y); ctx.stroke();
-};
-
-window.onmouseup = (e) => {
-    if(!painting) return;
-    painting = false;
-    let rect = canvas.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
-    
-    historial.push({x1: startX, y1: startY, x2: x, y2: y});
-    lineasCount++;
-    showTag(x, y);
-    redraw();
-};
-
 function showTag(ex, ey) {
     const tags = [document.getElementById('tag-a'), document.getElementById('tag-b'), document.getElementById('tag-c')];
     const labels = [misiones[nivel].a, misiones[nivel].b, misiones[nivel].c];
     let tag = tags[lineasCount - 1];
-    
     tag.innerText = labels[lineasCount - 1];
     tag.style.left = (startX + (ex - startX)/2) + "px"; 
     tag.style.top = (startY + (ey - startY)/2 - 15) + "px";
@@ -140,7 +110,7 @@ function showTag(ex, ey) {
     else if (lineasCount === 2) document.getElementById('instruction-footer').innerText = "Super ! Trace l'Hypoténuse.";
     else if (lineasCount === 3) {
         const m = misiones[nivel];
-        document.getElementById('instruction-footer').innerHTML = `Parfait ! <b>${m.mode === "additionne" ? "Additionne (a²+b²)" : "Soustrait (c²-b²)"}</b> los carrés.`;
+        document.getElementById('instruction-footer').innerHTML = `Parfait ! <b>${m.mode === "additionne" ? "Additionne (a²+b²)" : "Soustrait (c²-b²)"}</b> les carrés.`;
         document.getElementById('s2').classList.remove('active');
         document.getElementById('s3').classList.remove('locked');
         document.getElementById('s3').classList.add('active');
@@ -175,12 +145,8 @@ function closeMsg() {
     document.getElementById('msg-overlay').classList.add('hidden');
     if(window.lastWinStatus === true) { 
         nivel++; 
-        if(nivel < misiones.length) {
-            resetLevel(); 
-        } else { 
-            localStorage.setItem('mision4_completed', 'true'); 
-            window.location.href='index.html'; 
-        }
+        if(nivel < misiones.length) resetLevel(); 
+        else window.location.href='index.html'; 
     }
     window.lastWinStatus = false;
 }
