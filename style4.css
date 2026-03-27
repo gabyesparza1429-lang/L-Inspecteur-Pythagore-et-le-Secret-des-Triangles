@@ -1,30 +1,44 @@
-#house-bg {
-    width: 100%; height: 80%;
-    background-image: url('mision4.png');
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    border: 4px solid #5d6d7e;
-    border-radius: 15px;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0b2e46; font-family: 'Comic Sans MS', sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+#tablet-frame {
+    display: grid; grid-template-columns: 100px 1fr 200px;
+    width: 98vw; height: 95vh; background: #2c3e50; border: 10px solid #5d6d7e; border-radius: 30px; overflow: hidden;
 }
 
-.measure-hint {
-    position: absolute;
-    background: #2d3436; color: #39FF14;
-    padding: 4px 8px; border-radius: 5px;
-    font-weight: bold; font-size: 18px;
-    display: none; z-index: 100;
-    box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
-}
-.visible { display: block; }
+/* Herramientas */
+#toolbox { background: #34495e; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 20px; border-right: 2px solid #2c3e50; }
+.tool-item { width: 70px; height: 70px; background: #5499c7; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 3px solid #2980b9; color: white; font-size: 10px; }
+.formula-display { color: white; font-size: 12px; margin-top: 50px; transform: rotate(-90deg); white-space: nowrap; }
 
-.locked { opacity: 0.3; pointer-events: none; }
+/* Centro */
+#blueprint-container { background: #1a5276; display: flex; flex-direction: column; position: relative; }
+#header-info { padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; }
+#label-defis { background: #f1c40f; color: black; padding: 5px 15px; border-radius: 10px; font-weight: bold; }
 
-.modal-content {
-    background: white; padding: 30px; border-radius: 20px;
-    text-align: center; border: 10px solid;
-}
-.error { border-color: #ff7675; }
-.success { border-color: #55efc4; }
+#drawing-area { flex-grow: 1; position: relative; margin: 10px; border: 2px dashed rgba(255,255,255,0.2); border-radius: 15px; cursor: crosshair; background-image: url('mision4.png'); background-size: contain; background-repeat: no-repeat; background-position: center;}
+canvas { width: 100%; height: 100%; }
 
-/* ... resto de estilos de botones que ya tenías ... */
+#instruction-footer { background: rgba(0,0,0,0.5); padding: 15px; color: #39FF14; text-align: center; min-height: 60px; font-size: 1.2rem; }
+
+/* Pasos */
+#steps-sidebar { background: #d5dbdb; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+.step-box { background: white; padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; cursor: pointer; border-bottom: 4px solid #bdc3c7; }
+.step-box.active { background: #39FF14; transform: scale(1.05); }
+.step-box.locked { opacity: 0.3; pointer-events: none; }
+
+/* Medidas Neón */
+.measure-tag { position: absolute; background: #2d3436; color: #39FF14; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 20px; border: 2px solid #39FF14; display: none; }
+
+/* Calculadora Flotante */
+#calc-modal { position: absolute; bottom: 80px; right: 220px; z-index: 100; }
+#calc-body { background: #2c3e50; padding: 15px; border-radius: 15px; border: 4px solid #39FF14; width: 220px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+#calc-screen { background: #ecf0f1; color: black; text-align: right; padding: 10px; font-size: 24px; border-radius: 5px; margin-bottom: 10px; height: 45px; }
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.calc-grid button { padding: 10px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; }
+#btn-validar { width: 100%; margin-top: 10px; background: #39FF14; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+/* Feedback Popups */
+#msg-overlay { position: fixed; top:0; left:0; width: 100%; height:100%; background: rgba(0,0,0,0.9); display: flex; align-items:center; justify-content:center; z-index:2000; }
+#msg-box { background: white; padding: 40px; border-radius: 25px; text-align: center; border: 10px solid; max-width: 450px; }
+.hidden { display: none !important; }
