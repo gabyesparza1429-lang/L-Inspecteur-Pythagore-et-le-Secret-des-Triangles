@@ -1,4 +1,4 @@
-// 1. DATOS (Siguen igual para no romper nada)
+// VARIABLES GLOBALES (Afuera para que todos las vean)
 const misiones = [
     { title: "La Escalera", desc: "L'échelle mesure 5m (Hypoténuse), la base est à 3m (Côté b). Trouve le Côté a !", a: "Côté a = ?", b: "b = 3m", c: "Hypoténuse = 5m", res: 4, mode: "soustrait" },
     { title: "L'Arbre", desc: "Arbre de 10m (Hypoténuse), pointe au sol à 6m (Côté b). Trouve le Côté a !", a: "Côté a = ?", b: "b = 6m", c: "Hypoténuse = 10m", res: 8, mode: "soustrait" },
@@ -12,23 +12,18 @@ let canDraw = false, painting = false, startX, startY, lineasCount = 0;
 let historial = [], v = ""; 
 let canvas, ctx;
 
-// 2. ESTA FUNCIÓN AHORA ESTÁ AFUERA (PARA QUE EL BOTÓN VERDE LA VEA)
+// ESTA ES LA FUNCIÓN QUE EL BOTÓN VERDE LLAMA
 function doStep(s) {
+    console.log("Botón Lire pulsado"); // Esto aparecerá en la consola del navegador
     if (s === 1) {
-        // Mostrar problema
         document.getElementById('problem-desc').innerText = misiones[nivel].desc;
-        
-        // Cambiar luces de botones
         document.getElementById('s1').classList.remove('active');
         document.getElementById('s2').classList.remove('locked');
         document.getElementById('s2').classList.add('active');
-        
-        // Actualizar instrucción de abajo
         document.getElementById('instruction-footer').innerText = "Étape 2: Active le Crayon et identifie les mesures.";
     }
 }
 
-// 3. OTRAS FUNCIONES GLOBALES
 function enableDrawing() {
     if(document.getElementById('s2').classList.contains('locked')) return;
     canDraw = true;
@@ -42,17 +37,20 @@ function resetLevel() {
     document.getElementById('title-mission').innerText = misiones[nivel].title;
     document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour commencer.";
     document.getElementById('instruction-footer').innerText = "Étape 1: Lire l'énoncé.";
+    
     document.getElementById('calc-modal').classList.add('hidden');
     document.getElementById('calc-screen').innerText = "0";
     document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
+    
     if(ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     document.getElementById('s1').className = "step-box active";
     document.getElementById('s2').className = "step-box locked";
     document.getElementById('s3').className = "step-box locked";
     document.getElementById('btn-pencil').style.background = "#5499c7";
 }
 
-// 4. INICIALIZACIÓN
+// INICIALIZACIÓN
 window.onload = function() {
     canvas = document.getElementById('main-canvas');
     ctx = canvas.getContext('2d');
@@ -60,7 +58,6 @@ window.onload = function() {
     canvas.height = canvas.offsetHeight;
     resetLevel();
 
-    // Eventos de dibujo
     canvas.onmousedown = (e) => { if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; } };
     canvas.onmousemove = (e) => { if(painting) { redraw(); ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
     canvas.onmouseup = (e) => {
@@ -73,7 +70,6 @@ window.onload = function() {
     };
 };
 
-// 5. LÓGICA DE DIBUJO Y ETIQUETAS
 function redraw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#39FF14'; ctx.lineWidth = 6; ctx.shadowBlur = 15; ctx.shadowColor = '#39FF14'; ctx.lineCap = "round";
@@ -101,7 +97,7 @@ function showTag(ex, ey) {
     }
 }
 
-// 6. CALCULADORA
+// CALCULADORA
 function press(n) { v += n; document.getElementById('calc-screen').innerText = v; }
 function cls() { v = ""; document.getElementById('calc-screen').innerText = "0"; }
 function solve() { try { v = eval(v.replace('×','*')).toString(); document.getElementById('calc-screen').innerText = v; } catch(e) { cls(); } }
