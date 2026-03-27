@@ -1,6 +1,6 @@
 // 1. DATOS DE LOS 5 RETOS
 const misiones = [
-    { title: "La Escalera", desc: "L'échelle mesure 5m (Hypoténuse), la base est à 3m (Cateto b). Trouve le Cateto a !", a: "Cateto a = ?", b: "Cateto b = 3m", c: "Hypoténuse = 5m", res: 4 },
+    { title: "L'échelle", desc: "L'échelle mesure 5m (Hypoténuse), la base est à 3m (Cateto b). Trouve le Cateto a !", a: "Cateto a = ?", b: "Cateto b = 3m", c: "Hypoténuse = 5m", res: 4 },
     { title: "L'Arbre", desc: "Arbre de 10m (Hypoténuse), pointe au sol à 6m (Cateto b). Trouve le Cateto a !", a: "Cateto a = ?", b: "Cateto b = 6m", c: "Hypoténuse = 10m", res: 8 },
     { title: "Écran Géant", desc: "Base 80cm (Cateto b), Hauteur 60cm (Cateto a). Trouve l'Hypoténuse !", a: "Cateto a = 60cm", b: "Cateto b = 80cm", c: "Hypoténuse = ?", res: 100 },
     { title: "Rampe Skate", desc: "Diagonale 5m (Hypoténuse), hauteur 4m (Cateto a). Trouve le Cateto b !", a: "Cateto a = 4m", b: "Cateto b = ?", c: "Hypoténuse = 5m", res: 3 },
