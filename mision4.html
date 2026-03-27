@@ -21,7 +21,7 @@
                 <h2 id="mission-title">Chargement...</h2>
             </div>
             
-            <div id="canvas-container">
+            <div id="house-bg">
                 <canvas id="drawing-canvas"></canvas>
             </div>
 
@@ -42,12 +42,9 @@
                 <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
                 <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
                 <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
-                <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button onclick="calcRes()" style="background:#2ecc71">=</button><button class="op" onclick="calcSqrt()" style="background:#9b59b6">√</button>
+                <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button class="op" onclick="calcSqrt()" style="background:#9b59b6">√</button><button onclick="calcRes()">=</button>
             </div>
-            <div id="answer-zone">
-                <input type="number" id="final-answer" placeholder="Réponse?">
-                <button onclick="checkFinalAnswer()">Valider</button>
-            </div>
+            <button id="btn-validar" onclick="checkFinalAnswer()">VALIDER LA RÉPONSE</button>
         </div>
     </div>
 
@@ -55,7 +52,7 @@
         <div class="modal-content">
             <h2>🏆 GÉNIAL, SERGIO !</h2>
             <p>Le modèle est parfait. L'Inspecteur est fier de toi !</p>
-            <button onclick="nextReto()">CONTINUER</button>
+            <button onclick="nextReto()">PROCHAIN DÉFI</button>
         </div>
     </div>
 
