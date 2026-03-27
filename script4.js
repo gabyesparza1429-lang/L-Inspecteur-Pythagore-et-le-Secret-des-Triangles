@@ -13,51 +13,58 @@ window.onload = function() {
 
     const canvas = document.getElementById('main-canvas');
     const ctx = canvas.getContext('2d');
+    
+    // Ajuste de tamaño inicial
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
     function resetLevel() {
-        lineasCount = 0; historial = []; canDraw = false; calcVal = "";
+        lineasCount = 0; 
+        historial = []; 
+        canDraw = false; 
+        calcVal = "";
+        
         document.getElementById('num-ex').innerText = nivel + 1;
         document.getElementById('title-mission').innerText = misiones[nivel].title;
         
-        // CORRECCIÓN: Texto inicial claro
-        document.getElementById('problem-desc').innerText = "Appuie sur 'Lire' pour découvrir ton défi.";
-        document.getElementById('instruction-footer').innerText = "Commence par l'étape 1.";
+        // Mensaje inicial estático
+        document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour voir ton défi.";
+        document.getElementById('instruction-footer').innerText = "Étape 1: Lire l'énoncé.";
         
         document.getElementById('calc-modal').classList.add('hidden');
         document.getElementById('calc-screen').innerText = "0";
         document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
+        // Reset de botones de pasos
         document.getElementById('s1').className = "step-box active";
         document.getElementById('s2').className = "step-box locked";
         document.getElementById('s3').className = "step-box locked";
         document.getElementById('btn-pencil').style.background = "#5499c7";
     }
 
-    // PASO 1: LIRE
-    document.getElementById('s1').addEventListener('click', function() {
-        document.getElementById('problem-desc').innerText = misiones[nivel].desc;
-        this.classList.remove('active');
-        
-        // Activamos el paso 2
-        document.getElementById('s2').classList.remove('locked');
-        document.getElementById('s2').classList.add('active');
-        
-        // CORRECCIÓN: Instrucción de qué hacer ahora
-        document.getElementById('instruction-footer').innerText = "Maintenant, active le Crayon et dessine les mesures.";
-    });
+    // CLICK EN PASO 1: LIRE
+    document.getElementById('s1').onclick = function() {
+        // Solo si está activo
+        if (this.classList.contains('active')) {
+            document.getElementById('problem-desc').innerText = misiones[nivel].desc;
+            this.classList.remove('active');
+            
+            document.getElementById('s2').classList.remove('locked');
+            document.getElementById('s2').classList.add('active');
+            
+            document.getElementById('instruction-footer').innerText = "Étape 2: Active le Crayon et dessine les mesures.";
+        }
+    };
 
     // BOTÓN LÁPIZ
-    document.getElementById('btn-pencil').addEventListener('click', function() {
-        // Solo funciona si ya leyó (paso 2 activo)
+    document.getElementById('btn-pencil').onclick = function() {
         if(!document.getElementById('s2').classList.contains('locked')) {
             canDraw = true;
             this.style.background = "#39FF14";
             document.getElementById('instruction-footer').innerText = "Trace la ligne pour le Côté a.";
         }
-    });
+    };
 
     function redraw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -83,8 +90,7 @@ window.onload = function() {
 
         if(lineasCount === 3) {
             const m = misiones[nivel];
-            // CORRECCIÓN: Instrucción final de cálculo
-            document.getElementById('instruction-footer').innerHTML = `Modèle terminé ! <b>${m.mode}</b> en utilisant la calculatrice.`;
+            document.getElementById('instruction-footer').innerHTML = `Modèle terminé ! <b>${m.mode}</b>.`;
             document.getElementById('s2').classList.remove('active');
             document.getElementById('s3').classList.remove('locked');
             document.getElementById('s3').classList.add('active');
@@ -103,22 +109,32 @@ window.onload = function() {
     document.getElementById('sqrt-btn').onclick = () => { calcVal = Math.sqrt(eval(calcVal)).toFixed(0); document.getElementById('calc-screen').innerText = calcVal; };
 
     document.getElementById('btn-validar').onclick = () => {
-        if(parseInt(document.getElementById('calc-screen').innerText) === misiones[nivel].res) {
-            showMsg("🏆 BIEN JOUÉ !", "Tu as modélisé la situation comme un expert.", "#55efc4", true);
+        const valActual = parseInt(document.getElementById('calc-screen').innerText);
+        if(valActual === misiones[nivel].res) {
+            showMsg("🏆 BIEN JOUÉ !", "Tu es un Maître de la Modélisation.", "#55efc4", true);
         } else {
             showMsg("⚠️ OUPS", "Vérifie tes calculs, Sergio.", "#ff7675", false);
         }
     };
 
     function showMsg(t, txt, col, win) {
-        document.getElementById('msg-title').innerText = t; document.getElementById('msg-text').innerText = txt;
-        document.getElementById('msg-box').style.borderColor = col; document.getElementById('msg-overlay').classList.remove('hidden');
-        window.isWin = win;
+        document.getElementById('msg-title').innerText = t; 
+        document.getElementById('msg-text').innerText = txt;
+        document.getElementById('msg-box').style.borderColor = col; 
+        document.getElementById('msg-overlay').classList.remove('hidden');
+        window.winStatus = win;
     }
 
     document.getElementById('msg-btn').onclick = () => {
         document.getElementById('msg-overlay').classList.add('hidden');
-        if(window.isWin) { nivel++; if(nivel < misiones.length) resetLevel(); else window.location.href = 'index.html'; }
+        if(window.winStatus) { 
+            nivel++; 
+            if(nivel < misiones.length) resetLevel(); 
+            else { 
+                localStorage.setItem('mision4_completed', 'true'); 
+                window.location.href = 'index.html'; 
+            }
+        }
     };
 
     resetLevel();
