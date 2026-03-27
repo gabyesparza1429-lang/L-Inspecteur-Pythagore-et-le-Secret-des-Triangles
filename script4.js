@@ -67,6 +67,9 @@ window.onload = function() {
         lineasCount++;
         showTag(e.offsetX, e.offsetY);
         redraw();
+        // Conectar botón "Lire" después de que el DOM haya cargado
+const btnLire = document.getElementById('s1');
+if (btnLire) btnLire.onclick = () => doStep(1);
     };
 };
 
