@@ -2,8 +2,8 @@ const misiones = [
     { title: "La Escalera", desc: "L'échelle mesure 5m (Hypoténuse), la base est à 3m (Côté b). Trouve le Côté a !", a: "Côté a = ?", b: "Côté b = 3m", c: "Hypoténuse = 5m", res: 4, mode: "soustrait" },
     { title: "L'Arbre", desc: "Arbre de 10m (Hypoténuse), pointe au sol à 6m (Côté b). Trouve le Côté a !", a: "Côté a = ?", b: "Côté b = 6m", c: "Hypoténuse = 10m", res: 8, mode: "soustrait" },
     { title: "Écran Géant", desc: "Base 80cm (Côté b), Hauteur 60cm (Côté a). Trouve l'Hypoténuse !", a: "Côté a = 60cm", b: "Côté b = 80cm", c: "Hypoténuse = ?", res: 100, mode: "additionne" },
-    { title: "Rampe Skate", desc: "Hypoténuse = 5m, Côté a = 4m. Trouve le Côté b !", a: "a = 4m", b: "b = ?", c: "c = 5m", res: 3, mode: "soustrait" },
-    { title: "Le Toit", desc: "Côté a = 12m, Côté b = 5m. Trouve l'Hypoténuse !", a: "a = 12m", b: "b = 5m", c: "Hypoténuse = ?", res: 13, mode: "additionne" }
+    { title: "Rampe Skate", desc: "Hypoténuse = 5m, Côté a = 4m. Trouve le Côté b !", a: "Côté a = 4m", b: "Côté b = ?", c: "Hypoténuse = 5m", res: 3, mode: "soustrait" },
+    { title: "Le Toit", desc: "Côté a = 12m, Côté b = 5m. Trouve l'Hypoténuse !", a: "Côté a = 12m", b: "Côté b = 5m", c: "Hypoténuse = ?", res: 13, mode: "additionne" }
 ];
 
 let nivel = 0;
@@ -14,6 +14,13 @@ let historial = [];
 const canvas = document.getElementById('main-canvas');
 const ctx = canvas.getContext('2d');
 
+// --- NUEVA FORMA DE DETECTAR CLICS (MÁS SEGURA) ---
+document.getElementById('s1').addEventListener('click', function() {
+    if(!this.classList.contains('locked')) {
+        doStep(1);
+    }
+});
+
 function init() {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
@@ -21,35 +28,25 @@ function init() {
 }
 
 function resetLevel() {
-    lineasCount = 0; 
-    historial = [];
-    canDraw = false;
-    
+    lineasCount = 0; historial = []; canDraw = false;
     document.getElementById('num-ex').innerText = nivel + 1;
     document.getElementById('title-mission').innerText = misiones[nivel].title;
     document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour commencer.";
     document.getElementById('instruction-footer').innerText = "Identifie les Côtés et l'Hypoténuse.";
-    
     document.getElementById('calc-modal').classList.add('hidden');
     document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
-    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Reset Pasos
     document.getElementById('s1').className = "step-box active";
     document.getElementById('s2').className = "step-box locked";
     document.getElementById('s3').className = "step-box locked";
-    
     document.getElementById('btn-pencil').style.background = "#5499c7";
     cls();
 }
 
-// ESTA FUNCIÓN ES LA QUE SE ACTIVA AL DAR CLICK A LIRE
 function doStep(s) {
     if (s === 1) {
-        // Mostramos el problema
         document.getElementById('problem-desc').innerText = misiones[nivel].desc;
-        // Cambiamos estados visuales
         document.getElementById('s1').classList.remove('active');
         document.getElementById('s2').classList.remove('locked');
         document.getElementById('s2').classList.add('active');
@@ -103,7 +100,6 @@ function showTag(ex, ey) {
     }
 }
 
-// Calculadora
 let v = "";
 function press(n) { v += n; document.getElementById('calc-screen').innerText = v; }
 function cls() { v = ""; document.getElementById('calc-screen').innerText = "0"; }
@@ -113,7 +109,7 @@ function solveSqrt() { if(v) { v = Math.sqrt(eval(v)).toFixed(0); document.getEl
 function verify() {
     const r = parseInt(document.getElementById('calc-screen').innerText);
     if(r === misiones[nivel].res) showMsg("🏆 BIEN JOUÉ !", "Le modèle est correct.", "#55efc4", true);
-    else showMsg("⚠️ OUPS", "Vérifie tes mesures et le calcul.", "#ff7675", false);
+    else showMsg("⚠️ OUPS", "Vérifie tes mesures y el calcul.", "#ff7675", false);
 }
 
 function showMsg(t, txt, col, win) {
