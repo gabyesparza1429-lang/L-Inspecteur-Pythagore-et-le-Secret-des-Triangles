@@ -1,9 +1,9 @@
 const misiones = [
-    { title: "La Escalera", desc: "Hypoténuse = 5m, Côté b = 3m. Trouve le Côté a !", a: "Côté a = ?", b: "Côté b = 3m", c: "Hypoténuse = 5m", res: 4, mode: "soustrait" },
-    { title: "L'Arbre", desc: "Hypoténuse = 10m, Côté b = 6m. Trouve le Côté a !", a: "Côté a = ?", b: "Côté b = 6m", c: "Hypoténuse = 10m", res: 8, mode: "soustrait" },
+    { title: "La Escalera", desc: "Hypoténuse = 5m, Côté b = 3m. Trouve le Côté a !", a: "Côté a = ?", b: "b = 3m", c: "c = 5m", res: 4, mode: "soustrait" },
+    { title: "L'Arbre", desc: "Hypoténuse = 10m, Côté b = 6m. Trouve le Côté a !", a: "Côté a = ?", b: "b = 6m", c: "c = 10m", res: 8, mode: "soustrait" },
     { title: "Écran Géant", desc: "Côté a = 60cm, Côté b = 80cm. Trouve l'Hypoténuse !", a: "Côté a = 60cm", b: "Côté b = 80cm", c: "Hypoténuse = ?", res: 100, mode: "additionne" },
-    { title: "Rampe Skate", desc: "Hypoténuse = 5m, Côté a = 4m. Trouve le Côté b !", a: "Côté a = 4m", b: "Côté b = ?", c: "Hypoténuse = 5m", res: 3, mode: "soustrait" },
-    { title: "Le Toit", desc: "Côté a = 12m, Côté b = 5m. Trouve l'Hypoténuse !", a: "Côté a = 12m", b: "Côté b = 5m", c: "Hypoténuse = ?", res: 13, mode: "additionne" }
+    { title: "Rampe Skate", desc: "Hypoténuse = 5m, Côté a = 4m. Trouve le Côté b !", a: "a = 4m", b: "b = ?", c: "c = 5m", res: 3, mode: "soustrait" },
+    { title: "Le Toit", desc: "Côté a = 12m, Côté b = 5m. Trouve l'Hypoténuse !", a: "a = 12m", b: "b = 5m", c: "c = ?", res: 13, mode: "additionne" }
 ];
 
 let nivel = 0;
@@ -21,15 +21,35 @@ function init() {
 }
 
 function resetLevel() {
-    lineasCount = 0; historial = [];
+    lineasCount = 0; 
+    historial = [];
+    canDraw = false;
+    v = ""; // Limpia la calculadora interna
+
     document.getElementById('num-ex').innerText = nivel + 1;
     document.getElementById('title-mission').innerText = misiones[nivel].title;
     document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour commencer.";
+    document.getElementById('instruction-footer').innerText = "Identifie les Côtés et l'Hypoténuse.";
+    
+    // Cerramos calculadora y limpiamos pantalla
     document.getElementById('calc-modal').classList.add('hidden');
-    document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
+    document.getElementById('calc-screen').innerText = "0";
+    
+    // IMPORTANTE: Borrar las etiquetas de medidas anteriores
+    document.querySelectorAll('.measure-tag').forEach(t => {
+        t.style.display = "none";
+        t.innerText = "";
+    });
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Resetear botones de pasos
+    document.getElementById('s1').classList.add('active');
+    document.getElementById('s2').classList.remove('active');
     document.getElementById('s2').classList.add('locked');
+    document.getElementById('s3').classList.remove('active');
     document.getElementById('s3').classList.add('locked');
+    
     document.getElementById('btn-pencil').style.background = "#5499c7";
 }
 
@@ -39,6 +59,7 @@ function doStep(s) {
         document.getElementById('s2').classList.remove('locked');
         document.getElementById('s1').classList.remove('active');
         document.getElementById('s2').classList.add('active');
+        document.getElementById('instruction-footer').innerText = "Utilise le Crayon pour tracer les côtés.";
     }
 }
 
@@ -79,7 +100,9 @@ function showTag(ex, ey) {
     else if (lineasCount === 3) {
         const m = misiones[nivel];
         document.getElementById('instruction-footer').innerHTML = `Parfait ! <b>${m.mode === "additionne" ? "Additionne (a²+b²)" : "Soustrait (c²-b²)"}</b> les carrés.`;
+        document.getElementById('s2').classList.remove('active');
         document.getElementById('s3').classList.remove('locked');
+        document.getElementById('s3').classList.add('active');
         document.getElementById('calc-modal').classList.remove('hidden');
     }
 }
@@ -88,23 +111,37 @@ let v = "";
 function press(n) { v += n; document.getElementById('calc-screen').innerText = v; }
 function cls() { v = ""; document.getElementById('calc-screen').innerText = "0"; }
 function solve() { try { v = eval(v).toString(); document.getElementById('calc-screen').innerText = v; } catch(e) { cls(); } }
-function solveSqrt() { v = Math.sqrt(eval(v)).toFixed(0); document.getElementById('calc-screen').innerText = v; }
+function solveSqrt() { if(v!=="") { v = Math.sqrt(eval(v)).toFixed(0); document.getElementById('calc-screen').innerText = v; } }
 
 function verify() {
     const r = parseInt(document.getElementById('calc-screen').innerText);
-    if(r === misiones[nivel].res) showMsg("🏆 BIEN JOUÉ !", "Le modèle est correct. Tu es un vrai architecte !", "#55efc4", true);
-    else showMsg("⚠️ OUPS", "Vérifie tes mesures et le calcul.", "#ff7675", false);
+    if(r === misiones[nivel].res) {
+        showMsg("🏆 BIEN JOUÉ !", "Le modèle est correct. Tu es un vrai architecte !", "#55efc4", true);
+    } else {
+        showMsg("⚠️ OUPS", "Vérifie tes mesures et le calcul.", "#ff7675", false);
+    }
 }
 
-function showMsg(t, txt, col, win) {
-    document.getElementById('msg-title').innerText = t; document.getElementById('msg-text').innerText = txt;
-    document.getElementById('msg-box').style.borderColor = col; document.getElementById('msg-overlay').classList.remove('hidden');
-    window.win = win;
+function showMsg(t, txt, col, winStatus) {
+    document.getElementById('msg-title').innerText = t; 
+    document.getElementById('msg-text').innerText = txt;
+    document.getElementById('msg-box').style.borderColor = col; 
+    document.getElementById('msg-overlay').classList.remove('hidden');
+    window.lastWinStatus = winStatus; // Usamos una variable global clara
 }
 
 function closeMsg() {
     document.getElementById('msg-overlay').classList.add('hidden');
-    if(window.win) { nivel++; if(nivel < misiones.length) resetLevel(); else window.location.href='index.html'; }
+    if(window.lastWinStatus === true) { 
+        nivel++; 
+        if(nivel < misiones.length) {
+            resetLevel(); 
+        } else { 
+            localStorage.setItem('mision4_completed', 'true'); 
+            window.location.href='index.html'; 
+        }
+    }
+    window.lastWinStatus = false; // Reset de seguridad
 }
 
 window.onload = init;
