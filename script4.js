@@ -1,4 +1,4 @@
-// --- DATOS DE LAS MISIONES ---
+// 1. DATOS (Siguen igual para no romper nada)
 const misiones = [
     { title: "La Escalera", desc: "L'échelle mesure 5m (Hypoténuse), la base est à 3m (Côté b). Trouve le Côté a !", a: "Côté a = ?", b: "b = 3m", c: "Hypoténuse = 5m", res: 4, mode: "soustrait" },
     { title: "L'Arbre", desc: "Arbre de 10m (Hypoténuse), pointe au sol à 6m (Côté b). Trouve le Côté a !", a: "Côté a = ?", b: "b = 6m", c: "Hypoténuse = 10m", res: 8, mode: "soustrait" },
@@ -12,71 +12,57 @@ let canDraw = false, painting = false, startX, startY, lineasCount = 0;
 let historial = [], v = ""; 
 let canvas, ctx;
 
-// --- FUNCIONES GLOBALES (PARA QUE EL BOTÓN LAS ENCUENTRE) ---
+// 2. ESTA FUNCIÓN AHORA ESTÁ AFUERA (PARA QUE EL BOTÓN VERDE LA VEA)
+function doStep(s) {
+    if (s === 1) {
+        // Mostrar problema
+        document.getElementById('problem-desc').innerText = misiones[nivel].desc;
+        
+        // Cambiar luces de botones
+        document.getElementById('s1').classList.remove('active');
+        document.getElementById('s2').classList.remove('locked');
+        document.getElementById('s2').classList.add('active');
+        
+        // Actualizar instrucción de abajo
+        document.getElementById('instruction-footer').innerText = "Étape 2: Active le Crayon et identifie les mesures.";
+    }
+}
+
+// 3. OTRAS FUNCIONES GLOBALES
+function enableDrawing() {
+    if(document.getElementById('s2').classList.contains('locked')) return;
+    canDraw = true;
+    document.getElementById('btn-pencil').style.background = "#39FF14";
+    document.getElementById('instruction-footer').innerText = "Trace la ligne pour le Côté a.";
+}
 
 function resetLevel() {
-    lineasCount = 0; 
-    historial = [];
-    canDraw = false;
-    v = ""; 
-
+    lineasCount = 0; historial = []; canDraw = false; v = ""; 
     document.getElementById('num-ex').innerText = nivel + 1;
     document.getElementById('title-mission').innerText = misiones[nivel].title;
     document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour commencer.";
-    document.getElementById('instruction-footer').innerText = "Étape 1: Lire l'énoncé du problème.";
-    
+    document.getElementById('instruction-footer').innerText = "Étape 1: Lire l'énoncé.";
     document.getElementById('calc-modal').classList.add('hidden');
     document.getElementById('calc-screen').innerText = "0";
-    
-    document.querySelectorAll('.measure-tag').forEach(t => {
-        t.style.display = "none";
-        t.innerText = "";
-    });
-
-    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+    document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
+    if(ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     document.getElementById('s1').className = "step-box active";
     document.getElementById('s2').className = "step-box locked";
     document.getElementById('s3').className = "step-box locked";
     document.getElementById('btn-pencil').style.background = "#5499c7";
 }
 
-function doStep(s) {
-    if (s === 1) {
-        document.getElementById('problem-desc').innerText = misiones[nivel].desc;
-        document.getElementById('s1').classList.remove('active');
-        document.getElementById('s2').classList.remove('locked');
-        document.getElementById('s2').classList.add('active');
-        document.getElementById('instruction-footer').innerText = "Étape 2: Identifie les Côtés et l'Hypoténuse avec le Crayon.";
-    }
-}
-
-function enableDrawing() {
-    if(document.getElementById('s2').classList.contains('locked')) return;
-    canDraw = true;
-    document.getElementById('btn-pencil').style.background = "#39FF14";
-    document.getElementById('instruction-footer').innerText = "Sergio, trace la ligne pour le Côté a.";
-}
-
-// --- LÓGICA INTERNA ---
-
+// 4. INICIALIZACIÓN
 window.onload = function() {
     canvas = document.getElementById('main-canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
+    resetLevel();
 
-    canvas.onmousedown = (e) => {
-        if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; }
-    };
-
-    canvas.onmousemove = (e) => {
-        if (painting) {
-            redraw();
-            ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
-        }
-    };
-
+    // Eventos de dibujo
+    canvas.onmousedown = (e) => { if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; } };
+    canvas.onmousemove = (e) => { if(painting) { redraw(); ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
     canvas.onmouseup = (e) => {
         if(!painting) return;
         painting = false;
@@ -85,16 +71,13 @@ window.onload = function() {
         showTag(e.offsetX, e.offsetY);
         redraw();
     };
-
-    resetLevel();
 };
 
+// 5. LÓGICA DE DIBUJO Y ETIQUETAS
 function redraw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#39FF14'; ctx.lineWidth = 6; ctx.shadowBlur = 15; ctx.shadowColor = '#39FF14'; ctx.lineCap = "round";
-    historial.forEach(l => { 
-        ctx.beginPath(); ctx.moveTo(l.x1, l.y1); ctx.lineTo(l.x2, l.y2); ctx.stroke(); 
-    });
+    historial.forEach(l => { ctx.beginPath(); ctx.moveTo(l.x1, l.y1); ctx.lineTo(l.x2, l.y2); ctx.stroke(); });
 }
 
 function showTag(ex, ey) {
@@ -106,19 +89,19 @@ function showTag(ex, ey) {
     tag.style.top = (startY + (ey - startY)/2 - 15) + "px";
     tag.style.display = "block";
 
-    if (lineasCount === 1) document.getElementById('instruction-footer').innerText = "Bien ! Trace le Côté b.";
-    else if (lineasCount === 2) document.getElementById('instruction-footer').innerText = "Super ! Trace l'Hypoténuse.";
-    else if (lineasCount === 3) {
+    if (lineasCount === 3) {
         const m = misiones[nivel];
-        document.getElementById('instruction-footer').innerHTML = `Parfait ! <b>${m.mode === "additionne" ? "Additionne (a²+b²)" : "Soustrait (c²-b²)"}</b> les carrés.`;
+        document.getElementById('instruction-footer').innerHTML = `Parfait ! <b>${m.mode === "additionne" ? "Additionne (a²+b²)" : "Soustrait (c²-b²)"}</b>.`;
         document.getElementById('s2').classList.remove('active');
         document.getElementById('s3').classList.remove('locked');
         document.getElementById('s3').classList.add('active');
         document.getElementById('calc-modal').classList.remove('hidden');
+    } else {
+        document.getElementById('instruction-footer').innerText = lineasCount === 1 ? "Trace le Côté b." : "Trace l'Hypoténuse.";
     }
 }
 
-// --- CALCULADORA ---
+// 6. CALCULADORA
 function press(n) { v += n; document.getElementById('calc-screen').innerText = v; }
 function cls() { v = ""; document.getElementById('calc-screen').innerText = "0"; }
 function solve() { try { v = eval(v.replace('×','*')).toString(); document.getElementById('calc-screen').innerText = v; } catch(e) { cls(); } }
@@ -126,27 +109,17 @@ function solveSqrt() { if(v!=="") { v = Math.sqrt(eval(v)).toFixed(0); document.
 
 function verify() {
     const r = parseInt(document.getElementById('calc-screen').innerText);
-    if(r === misiones[nivel].res) {
-        showMsg("🏆 BIEN JOUÉ !", "Tu es un Maître de la Modélisation.", "#55efc4", true);
-    } else {
-        showMsg("⚠️ OUPS", "Vérifie tes calculs Sergio.", "#ff7675", false);
-    }
+    if(r === misiones[nivel].res) showMsg("🏆 BIEN JOUÉ !", "Modèle validé.", "#55efc4", true);
+    else showMsg("⚠️ OUPS", "Vérifie tes calculs.", "#ff7675", false);
 }
 
-function showMsg(t, txt, col, winStatus) {
-    document.getElementById('msg-title').innerText = t; 
-    document.getElementById('msg-text').innerText = txt;
-    document.getElementById('msg-box').style.borderColor = col; 
-    document.getElementById('msg-overlay').classList.remove('hidden');
-    window.lastWinStatus = winStatus;
+function showMsg(t, txt, col, win) {
+    document.getElementById('msg-title').innerText = t; document.getElementById('msg-text').innerText = txt;
+    document.getElementById('msg-box').style.borderColor = col; document.getElementById('msg-overlay').classList.remove('hidden');
+    window.levelWin = win;
 }
 
 function closeMsg() {
     document.getElementById('msg-overlay').classList.add('hidden');
-    if(window.lastWinStatus === true) { 
-        nivel++; 
-        if(nivel < misiones.length) resetLevel(); 
-        else window.location.href='index.html'; 
-    }
-    window.lastWinStatus = false;
+    if(window.levelWin) { nivel++; if(nivel < misiones.length) resetLevel(); else window.location.href='index.html'; }
 }
