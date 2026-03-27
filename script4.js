@@ -1,5 +1,5 @@
 // ===============================
-// script4.js corregido
+// script4.js CORREGIDO
 // ===============================
 
 const misiones = [
@@ -18,15 +18,22 @@ let v = "";
 let canvas, ctx;
 
 // ===============================
-// Función para inicializar todo
+// Función init
 // ===============================
 function init() {
+    // Inicializar canvas
     canvas = document.getElementById('main-canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
     resetLevel();
+
+    // Conectar botones
+    document.getElementById('btn-pencil').addEventListener('click', enableDrawing);
+    document.getElementById('s1').addEventListener('click', () => doStep(1));
+    document.getElementById('s2').addEventListener('click', () => doStep(2));
+    document.getElementById('s3').addEventListener('click', () => doStep(3));
 
     // Eventos de dibujo
     canvas.onmousedown = (e) => { if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; } };
@@ -39,14 +46,10 @@ function init() {
         showTag(e.offsetX, e.offsetY);
         redraw();
     };
-
-    // Conectar botón "Lire" de forma segura
-    const btnLire = document.getElementById('s1');
-    if(btnLire) btnLire.addEventListener('click', () => doStep(1));
 }
 
 // ===============================
-// Resetea el nivel actual
+// Resetea el nivel
 // ===============================
 function resetLevel() {
     lineasCount = 0;
@@ -72,7 +75,7 @@ function resetLevel() {
 }
 
 // ===============================
-// Función que llama el botón verde
+// doStep
 // ===============================
 function doStep(s) {
     if(s === 1) {
@@ -95,7 +98,7 @@ function enableDrawing() {
 }
 
 // ===============================
-// Redibuja el canvas
+// Redibuja canvas
 // ===============================
 function redraw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -113,7 +116,7 @@ function redraw() {
 }
 
 // ===============================
-// Mostrar etiquetas de medidas
+// Mostrar etiquetas
 // ===============================
 function showTag(ex, ey) {
     const tags = [document.getElementById('tag-a'), document.getElementById('tag-b'), document.getElementById('tag-c')];
@@ -141,7 +144,6 @@ function press(n) { v += n; document.getElementById('calc-screen').innerText = v
 function cls() { v = ""; document.getElementById('calc-screen').innerText = "0"; }
 function solve() { try { v = eval(v.replace('×','*')).toString(); document.getElementById('calc-screen').innerText = v; } catch(e) { cls(); } }
 function solveSqrt() { if(v!=="") { v = Math.sqrt(eval(v)).toFixed(0); document.getElementById('calc-screen').innerText = v; } }
-
 function verify() {
     const r = parseInt(document.getElementById('calc-screen').innerText);
     if(r === misiones[nivel].res) showMsg("🏆 BIEN JOUÉ !", "Le modèle est correct. Tu es un vrai architecte !", "#55efc4", true);
@@ -149,7 +151,7 @@ function verify() {
 }
 
 // ===============================
-// Mostrar mensaje y pasar al siguiente nivel
+// Mensajes y siguiente nivel
 // ===============================
 function showMsg(t, txt, col, win) {
     document.getElementById('msg-title').innerText = t;
@@ -169,6 +171,6 @@ function closeMsg() {
 }
 
 // ===============================
-// Iniciar todo al cargar DOM
+// Iniciar todo al cargar el DOM
 // ===============================
 window.addEventListener('DOMContentLoaded', init);
