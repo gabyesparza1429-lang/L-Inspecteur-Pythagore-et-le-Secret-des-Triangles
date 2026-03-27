@@ -6,7 +6,7 @@ body { background: #0b2e46; font-family: 'Comic Sans MS', sans-serif; height: 10
     width: 98vw; height: 95vh; background: #2c3e50; border: 10px solid #5d6d7e; border-radius: 30px; overflow: hidden;
 }
 
-#toolbox { background: #34495e; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 20px; border-right: 2px solid #2c3e50; }
+#toolbox { background: #34495e; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 20px; }
 .tool-item { width: 75px; height: 75px; background: #5499c7; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 3px solid #2980b9; color: white; font-size: 11px; }
 
 #blueprint-container { background: #1a5276; display: flex; flex-direction: column; position: relative; }
