@@ -1,9 +1,10 @@
+// 1. DATOS DE LOS 5 RETOS
 const misiones = [
-    { title: "L´échelle", desc: "L'échelle mesure 5m (c), la base est à 3m (b). Trouve la hauteur (a) !", a: "a = ?", b: "b = 3m", c: "c = 5m", res: 4 },
-    { title: "L'Arbre", desc: "Arbre de 10m (c), pointe au sol à 6m (b). Hauteur du tronc (a)?", a: "a = ?", b: "b = 6m", c: "c = 10m", res: 8 },
-    { title: "Écran Géant", desc: "Base 80cm (b), Hauteur 60cm (a). Trouve la diagonale (c) !", a: "a = 60cm", b: "b = 80cm", c: "c = ?", res: 100 },
-    { title: "Rampe Skate", desc: "Rampe de 5m (c), hauteur de 4m (a). Trouve la base (b) !", a: "a = 4m", b: "b = ?", c: "c = 5m", res: 3 },
-    { title: "Le Toit", desc: "Côté a=12m, Côté b=5m. Trouve la viga principale (c) !", a: "a = 12m", b: "b = 5m", c: "c = ?", res: 13 }
+    { title: "La Escalera", desc: "L'échelle mesure 5m (Hypoténuse), la base est à 3m (Cateto b). Trouve le Cateto a !", a: "Cateto a = ?", b: "Cateto b = 3m", c: "Hypoténuse = 5m", res: 4 },
+    { title: "L'Arbre", desc: "Arbre de 10m (Hypoténuse), pointe au sol à 6m (Cateto b). Trouve le Cateto a !", a: "Cateto a = ?", b: "Cateto b = 6m", c: "Hypoténuse = 10m", res: 8 },
+    { title: "Écran Géant", desc: "Base 80cm (Cateto b), Hauteur 60cm (Cateto a). Trouve l'Hypoténuse !", a: "Cateto a = 60cm", b: "Cateto b = 80cm", c: "Hypoténuse = ?", res: 100 },
+    { title: "Rampe Skate", desc: "Diagonale 5m (Hypoténuse), hauteur 4m (Cateto a). Trouve le Cateto b !", a: "Cateto a = 4m", b: "Cateto b = ?", c: "Hypoténuse = 5m", res: 3 },
+    { title: "Le Toit", desc: "Cateto a = 12m, Cateto b = 5m. Trouve l'Hypoténuse !", a: "Cateto a = 12m", b: "Cateto b = 5m", c: "Hypoténuse = ?", res: 13 }
 ];
 
 let nivel = 0;
@@ -11,8 +12,6 @@ let canDraw = false;
 let painting = false;
 let startX, startY;
 let lineasDibujadas = 0;
-
-// Aquí guardaremos las líneas para que no se borren
 let historialLineas = []; 
 
 const canvas = document.getElementById('main-canvas');
@@ -26,10 +25,10 @@ function init() {
 
 function resetLevel() {
     lineasDibujadas = 0;
-    historialLineas = []; // Limpiamos el historial
+    historialLineas = [];
     document.getElementById('num-ex').innerText = nivel + 1;
     document.getElementById('title-mission').innerText = misiones[nivel].title;
-    document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour commencer.";
+    document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour identifier les Catetos et l'Hypoténuse.";
     document.getElementById('calc-modal').classList.add('hidden');
     document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -43,6 +42,7 @@ function doStep(s) {
     if (s === 1) {
         document.getElementById('problem-desc').innerText = misiones[nivel].desc;
         document.getElementById('s2').classList.remove('locked');
+        document.getElementById('instruction-footer').innerText = "Utilise le Crayon pour tracer les Catetos.";
     }
 }
 
@@ -52,7 +52,6 @@ function enableDrawing() {
     document.getElementById('btn-pencil').style.background = "#39FF14";
 }
 
-// FUNCION PARA RE-DIBUJAR TODO EL HISTORIAL
 function redibujarTodo() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = '#39FF14'; 
@@ -78,10 +77,7 @@ canvas.onmousedown = (e) => {
 
 canvas.onmousemove = (e) => {
     if (!painting) return;
-    
-    // Dibujamos el historial + la línea que se está moviendo actualmente
     redibujarTodo();
-    
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     ctx.lineTo(e.offsetX, e.offsetY);
@@ -91,13 +87,10 @@ canvas.onmousemove = (e) => {
 canvas.onmouseup = (e) => {
     if(!painting) return;
     painting = false;
-    
-    // Guardamos la línea en el historial
     historialLineas.push({x1: startX, y1: startY, x2: e.offsetX, y2: e.offsetY});
-    
     lineasDibujadas++;
     showNextTag(e.offsetX, e.offsetY);
-    redibujarTodo(); // Aseguramos que se vea fija
+    redibujarTodo();
 };
 
 function showNextTag(ex, ey) {
@@ -106,20 +99,25 @@ function showNextTag(ex, ey) {
     
     let currentTag = tags[lineasDibujadas - 1];
     currentTag.innerText = labels[lineasDibujadas - 1];
-    
-    // Posición de la etiqueta en el medio de la línea dibujada
     currentTag.style.left = (startX + (ex - startX)/2) + "px"; 
     currentTag.style.top = (startY + (ey - startY)/2 - 20) + "px";
     currentTag.style.display = "block";
 
-    if (lineasDibujadas === 3) {
+    if (lineasDibujadas === 1) {
+        document.getElementById('instruction-footer').innerText = "Bien ! Trace maintenant le deuxième Cateto.";
+    } else if (lineasDibujadas === 2) {
+        document.getElementById('instruction-footer').innerText = "Super ! Maintenant, ferme le triangle avec l'Hypoténuse.";
+    } else if (lineasDibujadas === 3) {
+        // AQUÍ ESTÁ EL CAMBIO DE INSTRUCCIÓN TÉCNICA
+        const m = misiones[nivel];
+        let formulaHint = m.res === m.c ? "a² + b² = c²" : "c² - b² = a²";
+        document.getElementById('instruction-footer').innerText = `Modèle fini ! Utilise ${formulaHint} pour calculer la réponse.`;
         document.getElementById('s3').classList.remove('locked');
         document.getElementById('calc-modal').classList.remove('hidden');
-        document.getElementById('instruction-footer').innerText = "Parfait ! Calcule la réponse.";
     }
 }
 
-// --- Lógica de Calculadora ---
+// --- Calculadora ---
 let val = "";
 function press(n) { val += n; document.getElementById('calc-screen').innerText = val; }
 function cls() { val = ""; document.getElementById('calc-screen').innerText = "0"; }
@@ -129,9 +127,9 @@ function solveSqrt() { val = Math.sqrt(eval(val)).toFixed(0); document.getElemen
 function verify() {
     const r = parseInt(document.getElementById('calc-screen').innerText);
     if(r === misiones[nivel].res) {
-        showMsg("🏆 BIEN JOUÉ !", "Tu as modélisé la situation comme un expert.", "#55efc4", true);
+        showMsg("🏆 BIEN JOUÉ !", "Modèle validé ! Tu maîtrises les Catetos et l'Hypoténuse.", "#55efc4", true);
     } else {
-        showMsg("⚠️ OUPS, SERGIO", "Regarde bien tes mesures y réessaie !", "#ff7675", false);
+        showMsg("⚠️ OUPS, SERGIO", "Vérifie si tu dois additionner ou soustraire les carrés.", "#ff7675", false);
     }
 }
 
@@ -150,7 +148,6 @@ function closeMsg() {
         if(nivel < misiones.length) resetLevel();
         else { 
             localStorage.setItem('mision4_completed', 'true');
-            alert("Félicitations ! Misión 4 terminée."); 
             window.location.href='index.html'; 
         }
     }
