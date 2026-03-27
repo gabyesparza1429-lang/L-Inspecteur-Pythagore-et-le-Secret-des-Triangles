@@ -1,112 +1,78 @@
-const retos = [
-    { titulo: "La Escalera", texto: "Fenêtre à 4m, base à 3m. Quelle est la longueur de l'échelle?", a: 3, b: 4, c: 5, tipo: 'c' },
-    { titulo: "L'Arbre Cassé", texto: "Arbre de 10m (hypoténuse), base à 6m. Hauteur du tronc?", a: 8, b: 6, c: 10, tipo: 'a' },
-    { titulo: "Écran Géant", texto: "Base 80cm, Hauteur 60cm. Diagonale?", a: 60, b: 80, c: 100, tipo: 'c' },
-    { titulo: "Rampe Skate", texto: "Rampe (hypoténuse) 5m, base 3m. Hauteur?", a: 4, b: 3, c: 5, tipo: 'a' },
-    { titulo: "Le Toit", texto: "Viga A: 12, Viga B: 5. Quelle est la viga longue?", a: 5, b: 12, c: 13, tipo: 'c' }
-];
-
-let nivel = 0;
-let stepActual = 1;
+let currentStep = 0; // 0: Inicio, 1: Lire, 2: Dessiner, 3: Choisir, 4: Calculer
 const canvas = document.getElementById('drawing-canvas');
 const ctx = canvas.getContext('2d');
 
-function init() {
+// 1. GESTIÓN DE PASOS
+function nextStep(step) {
+    if (step !== currentStep + 1) {
+        alert("Sergio, suis l'ordre du plan !");
+        return;
+    }
+    currentStep = step;
+    document.querySelectorAll('.step-box').forEach(b => b.classList.remove('active'));
+    document.getElementById(['step-read','step-draw','step-choose','step-calc'][step-1]).classList.add('active');
+
+    if (step === 1) alert("Problème: L'échelle mesure 5m, la base est à 3m. Trouve la hauteur !");
+    if (step === 2) animateDrawing();
+    if (step === 3) alert("Formule choisie: a² + b² = c²");
+    if (step === 4) document.getElementById('mini-calc').classList.remove('hidden');
+}
+
+// Vinculamos los clics a los pasos
+document.getElementById('step-read').onclick = () => nextStep(1);
+document.getElementById('step-draw').onclick = () => nextStep(2);
+document.getElementById('step-choose').onclick = () => nextStep(3);
+document.getElementById('step-calc').onclick = () => nextStep(4);
+
+// 2. DIBUJO ANIMADO
+function animateDrawing() {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    cargarReto();
-}
-
-function cargarReto() {
-    stepActual = 1;
-    document.getElementById('current-ex').innerText = nivel + 1;
-    document.getElementById('mission-title').innerText = retos[nivel].titulo;
-    document.getElementById('problem-text').innerText = "Cliquez sur 'Lire' pour commencer.";
-    resetSteps();
-}
-
-function resetSteps() {
-    document.querySelectorAll('.step-btn').forEach((btn, i) => {
-        btn.classList.add('locked');
-        btn.classList.remove('active');
-    });
-    document.getElementById('step-1').classList.remove('locked');
-    document.getElementById('mini-calc').classList.add('hidden');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-function executeStep(s) {
-    if (document.getElementById(`step-${s}`).classList.contains('locked')) return;
-    
-    stepActual = s;
-    document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`step-${s}`).classList.add('active');
-
-    if (s === 1) { // LIRE
-        document.getElementById('problem-text').innerText = retos[nivel].texto;
-        document.getElementById('step-2').classList.remove('locked');
-    } 
-    else if (s === 2) { // DESSINER
-        dibujarTrianguloNeon();
-        document.getElementById('step-3').classList.remove('locked');
+    let p = 0;
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#39FF14"; ctx.lineWidth = 5;
+        ctx.shadowBlur = 10; ctx.shadowColor = "#39FF14";
+        
+        ctx.beginPath();
+        ctx.moveTo(50, 250);
+        ctx.lineTo(50 + (150 * Math.min(p, 1)), 250); // Base
+        if(p > 1) ctx.lineTo(50, 250 - (180 * Math.min(p-1, 1))); // Altura
+        ctx.closePath(); ctx.stroke();
+        
+        p += 0.05;
+        if (p < 2.2) requestAnimationFrame(draw);
     }
-    else if (s === 3) { // CHOISIR
-        alert("Modèle validé ! Utilisez la calculatrice pour trouver la valeur manquante.");
-        document.getElementById('step-4').classList.remove('locked');
-    }
-    else if (s === 4) { // CALCULER
-        document.getElementById('mini-calc').classList.remove('hidden');
-    }
+    draw();
 }
 
-function dibujarTrianguloNeon() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#39FF14';
-    ctx.lineWidth = 6;
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = '#39FF14';
-
-    ctx.beginPath();
-    ctx.moveTo(100, 350);
-    ctx.lineTo(400, 350); // Base
-    ctx.lineTo(100, 100); // Hipotenusa
-    ctx.closePath();
-    ctx.stroke();
-    
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = "#34495e";
-    ctx.font = "20px Arial";
-    ctx.fillText("?", 250, 220);
-}
-
-function checkFinalAnswer() {
-    const r = document.getElementById('final-answer').value;
-    const correct = retos[nivel].tipo === 'c' ? retos[nivel].c : retos[nivel].a;
-    
-    if (parseInt(r) === correct) {
-        document.getElementById('bravo-modal').classList.remove('hidden');
-    } else {
-        alert("Presque ! Réessaie le calcul.");
-    }
-}
-
-function nextReto() {
-    nivel++;
-    document.getElementById('bravo-modal').classList.add('hidden');
-    document.getElementById('final-answer').value = "";
-    if (nivel < retos.length) cargarReto();
-    else {
-        alert("FÉLICITATIONS SERGIO ! Tu as maîtrisé la modélisation !");
-        window.location.href = 'index.html';
-    }
-}
-
-// Lógica básica de calculadora
+// 3. CALCULADORA FUNCIONAL
 let calcVal = "";
-function calcInput(v) { calcVal += v; updateCalc(); }
-function calcClear() { calcVal = ""; updateCalc(); }
-function updateCalc() { document.getElementById('calc-display').innerText = calcVal || "0"; }
-function calcRes() { try { calcVal = eval(calcVal).toString(); updateCalc(); } catch { calcClear(); } }
-function calcSqrt() { calcVal = Math.sqrt(eval(calcVal)).toFixed(2); updateCalc(); }
+function calcInput(n) { calcVal += n; updateDisplay(); }
+function calcOp(o) { calcVal += o; updateDisplay(); }
+function calcClear() { calcVal = ""; updateDisplay(); }
+function updateDisplay() { document.getElementById('calc-display').innerText = calcVal || "0"; }
+function calcRes() {
+    try {
+        calcVal = eval(calcVal).toString();
+        updateDisplay();
+    } catch { calcClear(); }
+}
+function calcSqrt() {
+    try {
+        calcVal = Math.sqrt(eval(calcVal)).toFixed(2);
+        updateDisplay();
+    } catch { calcClear(); }
+}
 
-window.onload = init;
+// Para finalizar la misión (Examen Final)
+function checkFinal() {
+    const res = document.getElementById('calc-display').innerText;
+    if (res == "4") {
+        alert("BRAVO SERGIO ! Tu es le Maître de la Modélisation !");
+        localStorage.setItem('mision4_completed', 'true');
+        window.location.href = 'index.html';
+    } else {
+        alert("Calcul incorrect pour la hauteur (√16)");
+    }
+}
