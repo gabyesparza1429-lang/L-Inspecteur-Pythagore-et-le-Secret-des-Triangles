@@ -6,7 +6,7 @@ body { background: #0b2e46; font-family: 'Comic Sans MS', sans-serif; height: 10
     width: 98vw; height: 95vh; background: #2c3e50; border: 10px solid #5d6d7e; border-radius: 30px; overflow: hidden;
 }
 
-#toolbox { background: #34495e; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 20px; }
+#toolbox { background: #34495e; display: flex; flex-direction: column; align-items: center; padding-top: 20px; gap: 20px; border-right: 2px solid #2c3e50; }
 .tool-item { width: 75px; height: 75px; background: #5499c7; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 3px solid #2980b9; color: white; font-size: 11px; }
 
 #blueprint-container { background: #1a5276; display: flex; flex-direction: column; position: relative; }
@@ -22,14 +22,15 @@ canvas { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index
 
 #steps-sidebar { background: #d5dbdb; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
 .step-box { background: white; padding: 18px; border-radius: 15px; text-align: center; font-weight: bold; border-bottom: 5px solid #bdc3c7; cursor: pointer; }
-.step-box.active { background: #39FF14; transform: scale(1.05); color: black; }
+.step-box.active { background: #39FF14; transform: scale(1.05); }
 .step-box.locked { opacity: 0.4; pointer-events: none; }
 
 #calc-modal { position: absolute; bottom: 100px; right: 230px; z-index: 100; }
-#calc-body { background: #2c3e50; padding: 15px; border-radius: 20px; border: 4px solid #39FF14; width: 230px; }
+#calc-body { background: #2c3e50; padding: 15px; border-radius: 20px; border: 4px solid #39FF14; width: 230px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
 #calc-screen { background: #ecf0f1; color: black; text-align: right; padding: 10px; font-size: 26px; border-radius: 8px; margin-bottom: 10px; height: 50px; font-family: monospace; }
 .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .calc-grid button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; background: #34495e; color: white; }
+.calc-grid button.op { background: #e67e22; }
 #btn-validar { width: 100%; margin-top: 10px; background: #39FF14; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
 #msg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 2000; }
