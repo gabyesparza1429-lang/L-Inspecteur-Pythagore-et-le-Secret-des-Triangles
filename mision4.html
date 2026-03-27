@@ -8,11 +8,11 @@
 <body>
     <div id="game-container">
         <div id="toolbox">
-            <div class="tool-slot" id="pencil" onclick="activatePencil()">
+            <div class="tool-slot" id="pencil-tool" onclick="activatePencil()">
                 <img src="https://img.icons8.com/fluency/48/pencil.png">
-                <span>DESSINER</span>
+                <p>CRAYON</p>
             </div>
-            <div class="formula-box">a² + b² = c²</div>
+            <div class="formula-tag">a² + b² = c²</div>
         </div>
 
         <div id="blueprint-area">
@@ -22,13 +22,14 @@
                 <div id="hint-b" class="measure-hint"></div>
                 <div id="hint-c" class="measure-hint"></div>
             </div>
-            <div id="instruction-bar">Sergio, utilise le crayon pour tracer le triangle sur le plan !</div>
+            <div id="problem-text">Clique sur "Lire" pour commencer ta mission !</div>
         </div>
 
         <div id="steps-column">
-            <div class="step-card active" id="step-1">1. Lire 📖</div>
-            <div class="step-card" id="step-2">2. Dessiner ✏️</div>
-            <div class="step-card" id="step-3">3. Calculer 🖩</div>
+            <h3>Mission 4</h3>
+            <div class="step-card active" id="step-1" onclick="executeStep(1)">1. Lire 📖</div>
+            <div class="step-card locked" id="step-2" onclick="executeStep(2)">2. Dessiner ✏️</div>
+            <div class="step-card locked" id="step-3" onclick="executeStep(3)">3. Calculer 🖩</div>
         </div>
 
         <div id="mini-calc" class="hidden">
@@ -45,16 +46,16 @@
 
     <div id="error-modal" class="modal hidden">
         <div class="modal-content error">
-            <h2>⚠️ ATTENTION SERGIO</h2>
-            <p id="error-text"></p>
-            <button onclick="closeModal('error-modal')">Réessayer</button>
+            <h2>⚠️ OUPS, SERGIO</h2>
+            <p id="error-text">Regarde bien tes mesures et réessaie !</p>
+            <button onclick="closeModal('error-modal')">D'accord</button>
         </div>
     </div>
 
     <div id="success-modal" class="modal hidden">
         <div class="modal-content success">
             <h2>🏆 BIEN JOUÉ !</h2>
-            <p>Tu as modélisé la situation comme un expert.</p>
+            <p>Tu as réussi ce défi. Prêt pal le suivant ?</p>
             <button onclick="nextLevel()">NIVEAU SUIVANT</button>
         </div>
     </div>
