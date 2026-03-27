@@ -1,5 +1,5 @@
 const misiones = [
-    { title: "La Escalera", desc: "L'échelle mesure 5m (c), la base est à 3m (b). Trouve la hauteur (a) !", a: "a = ?", b: "b = 3m", c: "c = 5m", res: 4 },
+    { title: "L´échelle", desc: "L'échelle mesure 5m (c), la base est à 3m (b). Trouve la hauteur (a) !", a: "a = ?", b: "b = 3m", c: "c = 5m", res: 4 },
     { title: "L'Arbre", desc: "Arbre de 10m (c), pointe au sol à 6m (b). Hauteur du tronc (a)?", a: "a = ?", b: "b = 6m", c: "c = 10m", res: 8 },
     { title: "Écran Géant", desc: "Base 80cm (b), Hauteur 60cm (a). Trouve la diagonale (c) !", a: "a = 60cm", b: "b = 80cm", c: "c = ?", res: 100 },
     { title: "Rampe Skate", desc: "Rampe de 5m (c), hauteur de 4m (a). Trouve la base (b) !", a: "a = 4m", b: "b = ?", c: "c = 5m", res: 3 },
