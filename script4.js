@@ -1,120 +1,126 @@
-const levels = [
-    { txt: "L'échelle: mesure 5m (diagonale), base à 3m. Trouve la hauteur !", a: "3m", b: "?", c: "5m", target: 4 },
-    { txt: "L'arbre: il faisait 10m, la base est à 6m. Trouve le côté a !", a: "?", b: "6m", c: "10m", target: 8 },
-    { txt: "La TV: Base 80cm, Hauteur 60cm. Trouve la diagonale c !", a: "60cm", b: "80cm", c: "?", target: 100 },
-    { txt: "La Rampe: Diagonale 5m, hauteur 4m. Trouve la base !", a: "4m", b: "?", c: "5m", target: 3 },
-    { txt: "Le Toit: Côté a=12m, Côté b=5m. Trouve la viga c !", a: "12m", b: "5m", c: "?", target: 13 }
+const misiones = [
+    { title: "La Escalera", desc: "L'échelle mesure 5m (diagonale), la base est à 3m. Trouve la hauteur !", a: "3m", b: "?", c: "5m", res: 4 },
+    { title: "L'Arbre", desc: "Arbre de 10m, pointe au sol à 6m. Quelle est la hauteur du tronc?", a: "?", b: "6m", c: "10m", res: 8 }
 ];
 
-let curLevel = 0;
-let pencilActive = false;
-let isDrawing = false;
+let nivel = 0;
+let canDraw = false;
+let painting = false;
 let startX, startY;
-const canvas = document.getElementById('drawing-canvas');
+const canvas = document.getElementById('main-canvas');
 const ctx = canvas.getContext('2d');
 
-function loadLevel() {
-    document.getElementById('problem-text').innerText = levels[curLevel].txt;
-    document.querySelectorAll('.measure-hint').forEach(h => h.classList.remove('visible'));
-    document.getElementById('mini-calc').classList.add('hidden');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    pencilActive = false;
-    
-    // Reset de botones
-    document.getElementById('step-2').classList.add('locked');
-    document.getElementById('step-3').classList.add('locked');
+function init() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    resetLevel();
 }
 
-function executeStep(s) {
-    if (s === 1) { // Leer
-        document.getElementById('step-2').classList.remove('locked');
-        alert("Sergio: Utilise le crayon pour tracer le triangle sur le plan !");
+function resetLevel() {
+    document.getElementById('num-ex').innerText = nivel + 1;
+    document.getElementById('title-mission').innerText = misiones[nivel].title;
+    document.getElementById('problem-desc').innerText = "Clique sur 'Lire' pour voir l'énoncé.";
+    document.getElementById('calc-modal').classList.add('hidden');
+    document.querySelectorAll('.measure-tag').forEach(t => t.style.display = "none");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Bloquear pasos
+    document.getElementById('s2').classList.add('locked');
+    document.getElementById('s3').classList.add('locked');
+}
+
+function doStep(s) {
+    document.querySelectorAll('.step-box').forEach(b => b.classList.remove('active'));
+    document.getElementById('s' + s).classList.add('active');
+
+    if (s === 1) { // LEER
+        document.getElementById('problem-desc').innerText = misiones[nivel].desc;
+        document.getElementById('s2').classList.remove('locked');
     }
 }
 
-function activatePencil() {
-    pencilActive = true;
-    document.getElementById('pencil-tool').style.background = "#39FF14";
-    alert("Crayon activé ! Dessine maintenant.");
+function enableDrawing() {
+    if(document.getElementById('s2').classList.contains('locked')) return;
+    canDraw = true;
+    document.getElementById('btn-pencil').style.background = "#39FF14";
+    document.getElementById('instruction-footer').innerText = "Sergio, dessine maintenant le triangle sur le plan !";
 }
 
-// Dibujo para Sergio
 canvas.onmousedown = (e) => {
-    if(!pencilActive) return;
-    isDrawing = true;
+    if(!canDraw) return;
+    painting = true;
     startX = e.offsetX; startY = e.offsetY;
 };
 
 canvas.onmousemove = (e) => {
-    if (!isDrawing) return;
+    if (!painting) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = '#39FF14'; ctx.lineWidth = 5; ctx.shadowBlur = 10; ctx.shadowColor = '#39FF14';
+    ctx.strokeStyle = '#39FF14'; ctx.lineWidth = 6; ctx.shadowBlur = 15; ctx.shadowColor = '#39FF14';
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(e.offsetX, e.offsetY); // Sergio traza la hipotenusa
     ctx.stroke();
 };
 
 canvas.onmouseup = (e) => {
-    if(!isDrawing) return;
-    isDrawing = false;
-    // Mostrar pistas al terminar de dibujar
-    showHints(e.offsetX, e.offsetY);
-    document.getElementById('step-3').classList.remove('locked');
-    document.getElementById('mini-calc').classList.remove('hidden');
+    if(!painting) return;
+    painting = false;
+    showPistas(e.offsetX, e.offsetY);
+    document.getElementById('s3').classList.remove('locked');
 };
 
-function showHints(endX, endY) {
-    const hA = document.getElementById('hint-a');
-    const hB = document.getElementById('hint-b');
-    const hC = document.getElementById('hint-c');
+function showPistas(ex, ey) {
+    const tA = document.getElementById('tag-a');
+    const tB = document.getElementById('tag-b');
+    const tC = document.getElementById('tag-c');
 
-    hA.innerText = "a = " + levels[curLevel].a;
-    hA.style.left = startX - 60 + "px"; hA.style.top = startY + "px";
-    hA.classList.add('visible');
+    tA.innerText = "a = " + misiones[nivel].a;
+    tA.style.left = startX - 80 + "px"; tA.style.top = startY + "px";
+    tA.style.display = "block";
 
-    hB.innerText = "b = " + levels[curLevel].b;
-    hB.style.left = startX + 50 + "px"; hB.style.top = startY + 50 + "px";
-    hB.classList.add('visible');
+    tB.innerText = "b = " + misiones[nivel].b;
+    tB.style.left = startX + 50 + "px"; tB.style.top = startY + 50 + "px";
+    tB.style.display = "block";
 
-    hC.innerText = "c = " + levels[curLevel].c;
-    hC.style.left = endX - 30 + "px"; hC.style.top = endY - 40 + "px";
-    hC.classList.add('visible');
+    tC.innerText = "c = " + misiones[nivel].c;
+    tC.style.left = ex + 20 + "px"; tC.style.top = ey - 20 + "px";
+    tC.style.display = "block";
+
+    document.getElementById('calc-modal').classList.remove('hidden');
+    document.getElementById('instruction-footer').innerText = "Super ! Maintenant utilise la calculatrice.";
 }
 
 // Calculadora
-let cVal = "";
-function calcIn(n) { cVal += n; document.getElementById('calc-display').innerText = cVal; }
-function calcOp(o) { cVal += o; document.getElementById('calc-display').innerText = cVal; }
-function calcClear() { cVal = ""; document.getElementById('calc-display').innerText = "0"; }
-function calcRes() { try { cVal = eval(cVal).toString(); document.getElementById('calc-display').innerText = cVal; } catch(e) { calcClear(); } }
-function calcSqrt() { cVal = Math.sqrt(eval(cVal)).toFixed(0); document.getElementById('calc-display').innerText = cVal; }
+let val = "";
+function press(n) { val += n; document.getElementById('calc-screen').innerText = val; }
+function cls() { val = ""; document.getElementById('calc-screen').innerText = "0"; }
+function solve() { try { val = eval(val).toString(); document.getElementById('calc-screen').innerText = val; } catch(e) { cls(); } }
+function solveSqrt() { val = Math.sqrt(eval(val)).toFixed(0); document.getElementById('calc-screen').innerText = val; }
 
-function checkAnswer() {
-    const ans = parseInt(document.getElementById('calc-display').innerText);
-    if (ans === levels[curLevel].target) {
-        document.getElementById('success-modal').classList.remove('hidden');
+function verify() {
+    const r = parseInt(document.getElementById('calc-screen').innerText);
+    if(r === misiones[nivel].res) {
+        showMsg("🏆 BIEN JOUÉ !", "Tu as modélisé la situation comme un expert.", "#55efc4", true);
     } else {
-        document.getElementById('error-modal').classList.remove('hidden');
+        showMsg("⚠️ OUPS, SERGIO", "Regarde bien tes mesures et réessaie !", "#ff7675", false);
     }
 }
 
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function showMsg(t, txt, col, win) {
+    document.getElementById('msg-title').innerText = t;
+    document.getElementById('msg-text').innerText = txt;
+    document.getElementById('msg-box').style.borderColor = col;
+    document.getElementById('msg-overlay').classList.remove('hidden');
+    window.lastResult = win;
+}
 
-function nextLevel() {
-    curLevel++;
-    closeModal('success-modal');
-    if (curLevel < levels.length) {
-        loadLevel();
-    } else {
-        alert("FÉLICITATIONS ! Sergio, tu es un Maître Architecte !");
-        localStorage.setItem('mision4_completed', 'true');
-        window.location.href = 'index.html';
+function closeMsg() {
+    document.getElementById('msg-overlay').classList.add('hidden');
+    if(window.lastResult) {
+        nivel++;
+        if(nivel < misiones.length) resetLevel();
+        else { alert("Mission 4 Terminée !"); window.location.href='index.html'; }
     }
 }
 
-window.onload = () => {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    loadLevel();
-};
+window.onload = init;
