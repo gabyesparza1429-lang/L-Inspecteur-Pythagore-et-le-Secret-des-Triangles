@@ -39,12 +39,15 @@ window.onload = function() {
     }
 
     // PASO 1: LIRE
-    document.getElementById('s1').onclick = function() {
+   const s1 = document.getElementById('s1');
+if (s1) {
+    s1.addEventListener('click', function() {
         document.getElementById('problem-desc').innerText = misiones[nivel].desc;
         this.className = "step-box";
         document.getElementById('s2').className = "step-box active";
         document.getElementById('instruction-footer').innerText = "Étape 2: Active le Crayon.";
-    };
+    });
+}
 
     // BOTÓN LÁPIZ
     document.getElementById('btn-pencil').onclick = function() {
