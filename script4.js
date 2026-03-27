@@ -51,13 +51,15 @@ function resetLevel() {
 }
 
 // INICIALIZACIÓN
-window.onload = function() {
+window.addEventListener('DOMContentLoaded', () => {
+    // Inicializa canvas
     canvas = document.getElementById('main-canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     resetLevel();
 
+    // Eventos de dibujo
     canvas.onmousedown = (e) => { if(canDraw && lineasCount < 3) { painting = true; startX = e.offsetX; startY = e.offsetY; } };
     canvas.onmousemove = (e) => { if(painting) { redraw(); ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
     canvas.onmouseup = (e) => {
@@ -69,10 +71,10 @@ window.onload = function() {
         redraw();
     };
 
-    // 🔹 Esta línea arregla el botón Lire
+    // Conectar botón Lire seguro
     const btnLire = document.getElementById('s1');
-    if (btnLire) btnLire.onclick = () => doStep(1);
-};
+    if(btnLire) btnLire.addEventListener('click', () => doStep(1));
+});
 
 function redraw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
