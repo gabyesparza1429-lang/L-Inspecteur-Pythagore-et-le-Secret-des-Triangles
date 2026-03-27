@@ -2,57 +2,60 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission 4 - Le Maître de la Modélisation</title>
+    <title>Mission 4 - Sergio l'Architecte</title>
     <link rel="stylesheet" href="style4.css">
 </head>
 <body>
     <div id="game-container">
         <div id="toolbox">
-            <div class="tool-slot"><img src="https://img.icons8.com/fluency/48/pencil.png"></div>
-            <div class="tool-slot"><img src="https://img.icons8.com/fluency/48/ruler.png"></div>
-            <div class="tool-slot"><img src="https://img.icons8.com/fluency/48/compass.png"></div>
-            <div class="formula-tag">a² + b² = c²</div>
+            <div class="tool-slot" id="pencil" onclick="activatePencil()">
+                <img src="https://img.icons8.com/fluency/48/pencil.png">
+                <span>DESSINER</span>
+            </div>
+            <div class="formula-box">a² + b² = c²</div>
         </div>
 
         <div id="blueprint-area">
-            <div id="header-tablet">
-                <div id="progress-tag">DÉFI <span id="current-ex">1</span> / 5</div>
-                <h2 id="mission-title">Chargement...</h2>
-            </div>
-            
             <div id="house-bg">
                 <canvas id="drawing-canvas"></canvas>
+                <div id="hint-a" class="measure-hint"></div>
+                <div id="hint-b" class="measure-hint"></div>
+                <div id="hint-c" class="measure-hint"></div>
             </div>
-
-            <div id="problem-text">Analyse de la situation en cours...</div>
+            <div id="instruction-bar">Sergio, utilise le crayon pour tracer le triangle sur le plan !</div>
         </div>
 
         <div id="steps-column">
-            <h3>Modélisation Tactile</h3>
-            <div class="step-btn" id="step-1" onclick="executeStep(1)">Lire</div>
-            <div class="step-btn locked" id="step-2" onclick="executeStep(2)">Dessiner</div>
-            <div class="step-btn locked" id="step-3" onclick="executeStep(3)">Choisir</div>
-            <div class="step-btn locked" id="step-4" onclick="executeStep(4)">Calculer</div>
+            <div class="step-card active" id="step-1">1. Lire 📖</div>
+            <div class="step-card" id="step-2">2. Dessiner ✏️</div>
+            <div class="step-card" id="step-3">3. Calculer 🖩</div>
         </div>
 
         <div id="mini-calc" class="hidden">
             <div id="calc-display">0</div>
             <div class="calc-buttons">
-                <button onclick="calcInput('7')">7</button><button onclick="calcInput('8')">8</button><button onclick="calcInput('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
-                <button onclick="calcInput('4')">4</button><button onclick="calcInput('5')">5</button><button onclick="calcInput('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
-                <button onclick="calcInput('1')">1</button><button onclick="calcInput('2')">2</button><button onclick="calcInput('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
-                <button onclick="calcClear()" style="background:#e74c3c">C</button><button onclick="calcInput('0')">0</button><button class="op" onclick="calcSqrt()" style="background:#9b59b6">√</button><button onclick="calcRes()">=</button>
+                <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button class="op" onclick="calcOp('*')">×</button>
+                <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button class="op" onclick="calcOp('-')">-</button>
+                <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button class="op" onclick="calcOp('+')">+</button>
+                <button onclick="calcClear()" style="background:#ff7675">C</button><button onclick="calcIn('0')">0</button><button class="op" onclick="calcSqrt()">√</button><button onclick="calcRes()">=</button>
             </div>
-            <button id="btn-validar" onclick="checkFinalAnswer()">VALIDER LA RÉPONSE</button>
+            <button id="valider-btn" onclick="checkAnswer()">VALIDER LA RÉPONSE</button>
         </div>
     </div>
 
-    <div id="bravo-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>🏆 GÉNIAL, SERGIO !</h2>
-            <p>Le modèle est parfait. L'Inspecteur est fier de toi !</p>
-            <button onclick="nextReto()">PROCHAIN DÉFI</button>
+    <div id="error-modal" class="modal hidden">
+        <div class="modal-content error">
+            <h2>⚠️ ATTENTION SERGIO</h2>
+            <p id="error-text"></p>
+            <button onclick="closeModal('error-modal')">Réessayer</button>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content success">
+            <h2>🏆 BIEN JOUÉ !</h2>
+            <p>Tu as modélisé la situation comme un expert.</p>
+            <button onclick="nextLevel()">NIVEAU SUIVANT</button>
         </div>
     </div>
 
